@@ -1,0 +1,4 @@
+RewriteEngine On    # Turn on the rewriting engine
+#RewriteRule    ^article/([A-Za-z]+)/([0-9]+)/?$    index.php?param=$1&p=$2    [NC,L]
+
+RewriteRule     ^([A-Za-z]+)/?([A-Za-z]+)?/?$     index.php    [NC,L]
