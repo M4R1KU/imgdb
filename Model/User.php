@@ -44,11 +44,13 @@ class User extends Model {
      * @return User
      */
     public static function constructUserByID($id) {
-        $query = "SELECT * FROM User WHERE user_id = " . intval($id);
-        $res = parent::select($query);
-        if ($res) {
-            return self::constructUser($res[0]);
+        $db = DBConnector::getInstance();
+        $query = $db->prepare('SELECT * FROM User WHERE user_id = ?');
+        $query->bind_param('i', intval($id));
+        if (!$query->execute()) {
+            return false;
         }
+        return $query->get_result()->fetch_array(MYSQLI_ASSOC);
     }
 
     /**
@@ -58,8 +60,9 @@ class User extends Model {
      * @return User
      */
     public function constructUserByEmail($email = null) {
+        $db = DBConnector::getInstance();
         $e = (is_null($email)) ? $this->email : $email;
-        $query = "SELECT * FROM User WHERE email like '" . $e . "'";
+        $query = $db->prepare("SELECT * FROM User WHERE email like :email");
         $res = parent::select($query);
         if ($res) {
             return self::constructUser($res[0]);

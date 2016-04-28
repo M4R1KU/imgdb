@@ -10,6 +10,7 @@
 
 <div class="col-lg-5 panel panel-primary" id="login-panel">
     <div class="panel-heading" id="lnormalheading"><h1>Log In</h1></div>
+    <?php print_r($test) ?>
         <form action="<?=ROOT?>/login/login" method="post">
             <div class="form-group panel-body">
                 <!--Form for Log In-->

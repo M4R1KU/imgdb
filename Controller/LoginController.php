@@ -15,6 +15,8 @@ class LoginController extends Controller {
             $this->view->assign('flash', urldecode($this->request->params['passed']['flash']));
             $this->view->assign('title', urldecode($this->request->params['passed']['title']));
         }
+        $user = ModelFactory::createModel('User');
+        $this->view->assign('test', $user->constructUserByID(1));
     }
 
     public function login() {

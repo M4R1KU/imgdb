@@ -1,9 +1,5 @@
 <?php
 require_once('lib/DBConnector.php');
-require_once('Model/Blog.php');
-require_once('Model/Category.php');
-require_once('Model/Comment.php');
-require_once('Model/Entry.php');
 require_once('Model/User.php');
 
 class Model {
