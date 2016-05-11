@@ -1,3 +1,11 @@
+.main-navbar {
+    padding: 0 20px;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+/*
 .main-container {
     margin-top: 150px;
     padding-bottom: 50px;
@@ -104,7 +112,7 @@ h4.comname i {
   font-family: 'Material Icons';
   font-weight: normal;
   font-style: normal;
-  font-size: 24px;  /* Preferred icon size */
+  font-size: 24px;  !* Preferred icon size *!
   display: inline-block;
   width: 1em;
   height: 1em;
@@ -115,15 +123,15 @@ h4.comname i {
   white-space: nowrap;
   direction: ltr;
 
-  /* Support for all WebKit browsers. */
+  !* Support for all WebKit browsers. *!
   -webkit-font-smoothing: antialiased;
-  /* Support for Safari and Chrome. */
+  !* Support for Safari and Chrome. *!
   text-rendering: optimizeLegibility;
 
-  /* Support for Firefox. */
+  !* Support for Firefox. *!
   -moz-osx-font-smoothing: grayscale;
 
-  /* Support for IE. */
+  !* Support for IE. *!
   font-feature-settings: 'liga';
 }
 
@@ -140,3 +148,4 @@ h4.comname i {
 // Rules for using icons as white on a dark background.
 .material-icons.md-light { color: rgba(255, 255, 255, 1); }
 .material-icons.md-light.md-inactive { color: rgba(255, 255, 255, 0.3); }
+*/

@@ -1,4 +1,10 @@
 $(document).ready(function() {
+    $(".button-collapse").sideNav();  
+});
+
+
+
+$(document).ready(function() {
 	$('tr').on("click", function() {
     	window.location = $(this).data('href');
 	});
@@ -22,28 +28,29 @@ $(document).ready(function() {
     });
 
     function toggleClasses(element, pattern) {
-        $(element).parent().removeClass("has-success");
-        $(element).parent().removeClass("has-error");
-
+		console.log('dsad');
+        $(element).removeClass("valid");
+        $(element).removeClass("invalid");
 
         if (!pattern.test($(element).val()) || $(element).val() == "") {
-            $(element).parent().addClass("has-error");
+            $(element).addClass("invalid");
         }
         else {
-            $(element).parent().addClass("has-success");
+            $(element).addClass("valid");
         }
     }
 
     function confirmPassword() {
-        $(pc).parent().removeClass("has-success");
-        $(pc).parent().removeClass("has-error");
+        $(pc).removeClass("valid");
+        $(pc).removeClass("invalid");
 
         if ($(p).val() == $(pc).val() && $(pc).val() != "") {
-            $(pc).parent().addClass("has-success");
+            $(pc).addClass("valid");
         }
         else {
-            $(pc).parent().addClass("has-error");
+            $(pc).addClass("invalid");
         }
     }
 
 });
+

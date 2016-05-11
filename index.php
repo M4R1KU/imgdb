@@ -1,13 +1,5 @@
 <?php
 
-/*  __        __   _     _
-    \ \      / /__| |__ | |    ___   __ _
-     \ \ /\ / / _ \ '_ \| |   / _ \ / _` |
-      \ V  V /  __/ |_) | |__| (_) | (_| |
-       \_/\_/ \___|_.__/|_____\___/ \__, |
-                                     |___/ by Mario Kunz
- */
-
 session_start();
 /* loads config */
 require_once('config/config.php');
