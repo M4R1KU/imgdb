@@ -35,11 +35,6 @@ class Dispatcher {
 	 * @return Response                 response object created by the controller
 	 */
 	protected function _invoke(Controller $controller) {
-
-        /* CSRF TOKEN SETZEN */
-		$_SESSION[CSRF_TOKEN_NAME] = getNewCSRFToken();
-
-
 		$response = $controller->invokeAction();
 		if (!$response && $controller->autorender) {
 			$response = $controller->render();

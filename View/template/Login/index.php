@@ -39,14 +39,14 @@
         <div class="card col m11 s10 offset-m1 offset-s1 z-depth-1-half">
             <div class="card-content">
                 <h3>Register<i class="material-icons right cursor-pointer"
-                               onclick="Materialize.toast('Fill the input fields to register!', 4000)">info_outline</i>
+                               onclick="Materialize.toast('Fill the input fields to register!', 500000)">info_outline</i>
                 </h3>
                 <form action="<?= ROOT ?>/login/add" method="post">
                     <div class="row">
                         <div class="input-field col s12"><label for="email">E-Mail</label>
-                            <input type="email" name="email" id="email"
+                            <input type="email" class="tooltip-toggle" name="email" id="email"
                                    placeholder="Enter your e-mail address" required="" maxlength="45"
-                                   onclick="Materialize.toast('Please enter a valid E-Mail address. Example: Michael.Townley@example.com.', 4000)">
+                                   data-content="Please enter a valid E-Mail address. Example: Michael.Townley@example.com.">
                         </div>
                     </div>
                     <div class="row">
