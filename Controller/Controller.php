@@ -1,7 +1,9 @@
 <?php
 
-require_once('View/View.php');
-require_once('Model/ModelFactory.php');
+namespace MKWeb\ImgDB\Controller;
+use MKWeb\ImgDB\Network\Request;
+use MKWeb\ImgDB\Network\Response;
+use MKWeb\ImgDB\View\View;
 
 /**
  * Major Controller class

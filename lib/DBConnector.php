@@ -1,5 +1,8 @@
 <?php
 
+namespace MKWeb\ImgDB\lib;
+use mysqli;
+
 /**
  * handles the connection to the Database
  * 

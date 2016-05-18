@@ -1,5 +1,7 @@
 <?php
-require_once('lib/ControllerResolver.php');
+
+namespace MKWeb\ImgDB\Network;
+use MKWeb\ImgDB\Controller\Controller;
 
 
 /**

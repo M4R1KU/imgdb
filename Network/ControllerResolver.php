@@ -1,9 +1,12 @@
 <?php
-require_once('Controller/Controller.php');
+
+namespace MKWeb\ImgDB\Network;
+use MKWeb\ImgDB\Controller\Controller;
 
 /**
  * With the CommandResolver class you can get
  * an instance of the requested Controlle
+ * @property  request
  * @author Mario Kunz
  *
  */
@@ -48,7 +51,7 @@ class ControllerResolver {
 	protected function loadController($controller) {
 
 		if (!empty($controller)) {
-			$class = ucfirst($controller) . 'Controller';
+			$class = "MKWeb\\ImgDB\\Controller\\" . ucfirst($controller) . 'Controller';
 			$file = $this->path . ucfirst($controller) . 'Controller.php';
 			if (!file_exists($file)) {
 				if (empty($this->defaultcontroller)) {
@@ -58,7 +61,7 @@ class ControllerResolver {
 			}
 			include_once($file);
 			if (!class_exists($class)) {
-				include_once("{$this->path}NotFoundController.php");
+				include_once("ControllerResolver.php");
 				$this->request->params['action'] = 'Index';
 				return 'NotFoundController';
 			}

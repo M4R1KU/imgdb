@@ -5,8 +5,10 @@
  * Date: 19.11.2015
  * Time: 14:18
  */
-require_once('Controller.php');
-require_once('lib/Validator.php');
+
+namespace MKWeb\ImgDB\Controller;
+
+use MKWeb\ImgDB\Util\Validator;
 
 class LoginController extends Controller {
 

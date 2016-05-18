@@ -5,6 +5,10 @@
  * Date: 21.11.2015
  * Time: 14:52
  */
+namespace MKWeb\ImgDB\Model\User;
+
+use MKWeb\ImgDB\lib\DBConnector;
+use MKWeb\ImgDB\Model\Model;
 
 class User extends Model {
 

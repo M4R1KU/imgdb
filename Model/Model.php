@@ -1,6 +1,8 @@
 <?php
-require_once('lib/DBConnector.php');
-require_once('Model/User.php');
+
+namespace MKWeb\ImgDB\Model;
+
+use MKWeb\ImgDB\lib\DBConnector;
 
 class Model {
 

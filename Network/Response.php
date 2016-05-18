@@ -1,5 +1,6 @@
 <?php
 
+namespace MKWeb\ImgDB\Network; 
 
 /**
  * Response class

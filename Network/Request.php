@@ -1,5 +1,7 @@
 <?php
 
+namespace MKWeb\ImgDB\Network;
+
 class Request
 {
 

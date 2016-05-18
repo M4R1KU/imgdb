@@ -1,6 +1,6 @@
 <?php
 
-
+namespace MKWeb\ImgDB\Util;
 /**
  * Basic Validator class for inut fields
  */

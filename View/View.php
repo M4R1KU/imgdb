@@ -1,5 +1,10 @@
 <?php
 
+namespace MKWeb\ImgDB\View;
+
+use MKWeb\ImgDB\Network\Request;
+use MKWeb\ImgDB\Network\Response;
+
 class View {
 
 	/**
