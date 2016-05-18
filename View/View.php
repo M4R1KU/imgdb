@@ -70,27 +70,9 @@ class View {
 	}
 
 	/**
-	 * escapes html characters
-	 * could escape an array or just a given string
-	 * @param mixed $text array or string
-	 */
-	public function h($text) {
-
-		if (is_string($text)) {
-		} elseif (is_array($text)) {
-			$texts = array();
-			foreach ($text as $k => $t) {
-				$texts[$k] = $this->h($t);
-			}
-			return $texts;
-		}
-		return htmlspecialchars($text);
-
-	}
-
-	/**
 	 * magic getter method for the view class
 	 * @param string $name variable to get
+	 * @return mixed|null
 	 */
 	public function __get($name) {
 		return isset($this->vars[$name]) ? $this->vars[$name] : null;

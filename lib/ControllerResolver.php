@@ -24,7 +24,7 @@ class ControllerResolver {
 	 * if no controller is set it takes the default Controller
 	 * @param Request $request
 	 * @param Response $response
-	 * @return boolean|Ambigous <Controller, unknown>
+	 * @return boolean <Controller, unknown>
 	 */
 	public function getController(Request $request, Response $response) {
 		if (isset($request->params['controller'])) {
@@ -42,7 +42,8 @@ class ControllerResolver {
 
 	/**
 	 * loads the given Controller from the filesystem and detects the Controllerclass
-	 * @param unknown $controller
+	 * @param string $controller
+	 * @return string|void
 	 */
 	protected function loadController($controller) {
 
@@ -51,7 +52,7 @@ class ControllerResolver {
 			$file = $this->path . ucfirst($controller) . 'Controller.php';
 			if (!file_exists($file)) {
 				if (empty($this->defaultcontroller)) {
-					return ;
+					return;
 				}
 				$file = "{$this->path}{$this->defaultcontroller}Controller.php";
 			}

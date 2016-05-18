@@ -63,14 +63,14 @@ require_once('Model/ModelFactory.php');
 
 
         /**
-         * controller Contstructor
+         * controller Constructor
          * @param Request  $request  current request
          * @param Response $response response to send back
          */
         public function __construct(Request $request, Response $response) {
             $this->request = $request;
             $this->response = $response;
-            $this->template = $this->_setTemplate();
+            $this->template = $this->_setTemplate($this->request->params['action']);
             $this->view = new View($request, $response);
 
             /**
@@ -81,16 +81,21 @@ require_once('Model/ModelFactory.php');
                 if (!in_array($this->request->uri, $this->allowedsites)) {
                     header('Location: ' . ROOT . '/login/index');
                 }
+            } else {
+                if (!preg_match('/\/login.*(?=logout).*/', $this->request->uri) && $this->request->uri !== '/index/index') {
+                    header('Location: ' . ROOT . '/index/index');
+                }
             }
         }
 
         /**
          * returns string of the template file path
+         * @param $template
          * @return mixed path if file exists else false
          */
-        protected function _setTemplate() {
+        protected function _setTemplate($template) {
             $cont = ucfirst($this->request->params['controller']);
-            $action = $this->request->params['action'];
+            $action = $template;
 
             $path = "View/template/{$cont}/{$action}.php";
             if (!file_exists($path)) {
@@ -139,13 +144,6 @@ require_once('Model/ModelFactory.php');
             return $response;
 
         }
-
-        public function h($text) {
-
-            return $this->view->h($text);
-
-        }
-
 
         /**
          * magic set method

@@ -15,6 +15,7 @@ class User extends Model {
 
 
     public function __construct($id = null, $email = null, $nickname = null, $password = null) {
+        parent::__construct('user');
         $this->id = $id;
         $this->email = $email;
         $this->nickname = $nickname;
@@ -44,13 +45,10 @@ class User extends Model {
      * @return User
      */
     public static function constructUserByID($id) {
-        $db = DBConnector::getInstance();
-        $query = $db->prepare('SELECT * FROM User WHERE user_id = ?');
+        $query = DBConnector::getInstance()->prepare('SELECT * FROM User WHERE user_id = ?');
         $query->bind_param('i', intval($id));
-        if (!$query->execute()) {
-            return false;
-        }
-        return $query->get_result()->fetch_array(MYSQLI_ASSOC);
+        $res = parent::readAllOrSingle($query);
+        return $res;
     }
 
     /**
@@ -60,40 +58,12 @@ class User extends Model {
      * @return User
      */
     public function constructUserByEmail($email = null) {
-        $db = DBConnector::getInstance();
         $e = (is_null($email)) ? $this->email : $email;
-        $query = $db->prepare("SELECT * FROM User WHERE email like :email");
-        $res = parent::select($query);
-        if ($res) {
-            return self::constructUser($res[0]);
-        }
-    }
-
-    /**
-     * hashes the passwort given as parameter
-     *
-     * @param String $pw
-     * @return String hashedpw
-     */
-    private static function hashPW($pw) {
-        return hash('sha512', $pw);
-    }
-
-    /**
-     * gets all rows of the table
-     * @return array
-     */
-    public function getAll() {
-        $query = "SELECT * FROM User";
-        $res = parent::select($query);
-        if ($res) {
-            $out = array();
-            foreach($res as $row) {
-                $b = self::constructBlogByID($row['user_id']);
-                $out[] = $b;
-            }
-            return $out;
-        }
+        $query = $this->connection->prepare("SELECT * FROM User WHERE email like ?");
+        $query->bind_param('s', $e);
+        $res = $this->readAllOrSingle($query);
+        return self::constructUser($res);
+        
     }
 
     /**
@@ -103,22 +73,18 @@ class User extends Model {
      * @return bool
      */
     public function create() {
-        $query = "INSERT INTO User (email, nickname, password) VALUES ('". $this->email . "', '". $this->nickname. "', '". $this->password ."')";
-        $res = parent::query($query);
-        if ($res) {
-            $this->id = parent::getLastId();
-            return true;
-        }
+        $query = $this->connection->prepare("INSERT INTO User (email, nickname, password) VALUES (?, ?, ?)");
+        $query->bind_param('sss', $this->email, $this->nickname, password_hash($this->password, PASSWORD_BCRYPT));
+        if (!$query->execute()) return false;
+        $this->id = $this->connection->insert_id;
+        return true;
+
+    }
+    
+    public function checkLogin($password) {
+        return password_verify($password, $this->getPassword());
     }
 
-    /**
-     *  checks if the email and the password is the same
-     *
-     * @return boolean
-     */
-    public function _equals($user) {
-        return $user->getEmail() == $this->email && $user->getPassword() == $this->password;
-    }
 
     /**
      * checks if the email wich is given is unique
@@ -127,8 +93,10 @@ class User extends Model {
      * @return bool
      */
     public function isUniqueEmail($email) {
-        $query = "SELECT user_id FROM User where email like '" . $email . "'";
-        $res = parent::select($query);
+        $db = DBConnector::getInstance();
+        $query = $db->prepare("SELECT user_id FROM User where email like ?");
+        $query->bind_param('s', $email);
+        $res = $this->readAllOrSingle($query);
         return empty($res);
     }
 
@@ -189,13 +157,10 @@ class User extends Model {
     }
 
     /**
-     * @param mixed $password
+     * @param $password
      */
-    public function setPassword($password)
-    {
-        $this->password = $this->hashPW($password);
+    public function setPassword($password) {
+        $this->password = $password;
     }
-
-
 
 }

@@ -10,11 +10,15 @@ $(document).ready(function() {
 	});
 
     $('.tooltip-toggle').focus(function() {
-        $('body').append('<span class="tooltip z-depth-4">' + $(this).attr('data-content') + '</span>');
+        $('body').append('<span class="tooltip z-depth-4 animated fadeIn">' + $(this).attr('data-content') + '</span>');
         var offset = $(this).offset();
-        $('body').find('span.tooltip').css({'top' : offset.top, 'left' : offset.left - 300})
+        $('body').find('span.tooltip').css({'top' : offset.top, 'left' : offset.left - 320})
     });
     $('.tooltip-toggle').focusout(function() {
+        $('body').find('span.tooltip').remove();
+    });
+
+    $(window).resize(function() {
         $('body').find('span.tooltip').remove();
     });
 
