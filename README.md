@@ -1,21 +1,10 @@
-# WebLog
-School Projet: Modul 133
+# ImgDB
+School Projet: Modul 151
 
-This is a Blog Porject for my school
+An ImageDatabase for the cool people.
 
-It's build with a mvc pattern.
-
-I inspired myself by the CakePHP Framework.
-http://cakephp.org/
-I also worked with CakePHP for private things, it's very cool and powerful.
-
-I didn't copied very much I just looked for an example how to do it.
-Some codelines I took over for my project.
-
-I tried to make my own Solution.
-
-
-(We must take SQLite or just normal text files as Database. MySQL or any other relational Database was not allowed)
-
+The application is based on an self-coded MVC-Pattern
+The whole structure is inspired by the CakePHP framework which I used recently for another webpage.
+[CakePHP](http://cakephp.org/)
 
 :stuck_out_tongue_winking_eye:
