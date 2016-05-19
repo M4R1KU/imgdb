@@ -16,3 +16,6 @@ I tried to make my own Solution.
 
 
 (We must take SQLite or just normal text files as Database. MySQL or any other relational Database was not allowed)
+
+
+:stuck_out_tongue_winking_eye:
