@@ -17,7 +17,7 @@
                     <div class="row">
                         <div class="input-field col s12">
                             <label for="login_email">E-Mail</label>
-                            <input type="text" name="login_email" id="login_email" placeholder="Enter your e-mail address">
+                            <input type="email" name="login_email" id="login_email" placeholder="Enter your e-mail address">
                         </div>
                     </div>
                     <div class="row">

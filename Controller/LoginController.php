@@ -8,6 +8,7 @@
 
 namespace MKWeb\ImgDB\Controller;
 
+use MKWeb\ImgDB\Model\User;
 use MKWeb\ImgDB\Util\Validator;
 
 class LoginController extends Controller {

@@ -1,2 +1,2 @@
 <h1>Hello Everyone!</h1>
-<a class="btn btn-primary" href="<?=ROOT?>/login/index">Sign In</a>
+<?= linkHelper(['controller' => 'login', 'action' => 'index'], 'Sign In', ['class' => ['btn', 'waves-effect', 'waves-light']]) ?>

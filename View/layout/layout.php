@@ -15,12 +15,12 @@
 <nav class="blue-grey darken-4">
     <div class="nav-wrapper main-navbar">
             <div>
-                <a href="#!" class="brand-logo">imgDB</a>
+                <?= linkHelper(['controller' =>'index','action' => 'index'], 'imgDB', ['class' => 'brand-logo']) ?>
                 <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
             </div>
             <ul class="right hide-on-med-and-down">
-                <li><a href="<?= ROOT?>/login/index">Login</a></li>
-                <li><a href="<?= ROOT?>/login/logout">Logout</a></li>
+                <li><?= linkHelper(['controller' => 'login', 'action' => 'index'], 'Login')?></li>
+                <li><?= linkHelper(['controller' => 'login', 'action' => 'logout'], 'Logout')?></li>
             </ul>
         <ul class="side-nav" id="mobile-demo">
             <li><a href="sass.html">Sass</a></li>

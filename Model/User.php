@@ -5,10 +5,9 @@
  * Date: 21.11.2015
  * Time: 14:52
  */
-namespace MKWeb\ImgDB\Model\User;
+namespace MKWeb\ImgDB\Model;
 
 use MKWeb\ImgDB\lib\DBConnector;
-use MKWeb\ImgDB\Model\Model;
 
 class User extends Model {
 
@@ -19,7 +18,7 @@ class User extends Model {
 
 
     public function __construct($id = null, $email = null, $nickname = null, $password = null) {
-        parent::__construct('user');
+        parent::__construct(__CLASS__);
         $this->id = $id;
         $this->email = $email;
         $this->nickname = $nickname;
@@ -47,6 +46,7 @@ class User extends Model {
      *
      * @param $id
      * @return User
+     * @deprecated 
      */
     public static function constructUserByID($id) {
         $query = DBConnector::getInstance()->prepare('SELECT * FROM User WHERE user_id = ?');
@@ -102,6 +102,21 @@ class User extends Model {
         $query->bind_param('s', $email);
         $res = $this->readAllOrSingle($query);
         return empty($res);
+    }
+    
+    public function readAll() {
+        $res = parent::readAll();
+        $out = [];
+        foreach ($res as $user) {
+            $out[] = $this->constructUser($user);
+        }
+        return $out;
+        
+    }
+    
+    public function readById($id)
+    {
+        return $this->constructUser(parent::readById($id));
     }
 
     /**

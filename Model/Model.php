@@ -9,12 +9,13 @@ class Model {
     protected $currentTable;
 	protected $connection;
 
-	/**
-	 * Model constructor.
-	 */
+    /**
+     * Model constructor.
+     * @param $currentTable
+     */
 	public function __construct($currentTable)
 	{
-        $this->currentTable = $currentTable;
+        $this->currentTable = ucfirst($currentTable);
 		$this->connection = DBConnector::getInstance();
 	}
 
@@ -49,10 +50,16 @@ class Model {
         return $rows;
     }
 
+    public function readAll() {
+        $query = "SELECT * FROM {$this->currentTable}";
+        return $this->connection->query($query);
+    }
+
     public function readById($id) {
         $query = $this->connection->prepare("SELECT * FROM {$this->currentTable} WHERE {$this->currentTable}_id = ?");
         $query->bind_param('i', $id);
-        
+        return $this->readAllOrSingle($query);
+
     }
 }
 

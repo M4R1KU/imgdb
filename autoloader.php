@@ -25,7 +25,11 @@ const classes = [
     "MKWeb\\ImgDB\\Network\\Request" => __DIR__ . "/Network/Request.php",
     "MKWeb\\ImgDB\\Network\\Response" => __DIR__ . "/Network/Response.php",
     "MKWeb\\ImgDB\\Network\\Dispatcher" => __DIR__ . "/Network/Dispatcher.php",
-    "MKWeb\\ImgDB\\Network\\ControllerResolver" => __DIR__ . "/Network/ControllerResolver.php"
+    "MKWeb\\ImgDB\\Network\\ControllerResolver" => __DIR__ . "/Network/ControllerResolver.php",
+
+    "MKWeb\\ImgDB\\lib\\DBConnector" => __DIR__ . "/lib/DBConnector.php",
+
+    "MKWeb\\ImgDB\\Util\\Validator" => __DIR__ . "/util/Validator.php"
 ];
 
 /**

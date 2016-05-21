@@ -27,3 +27,22 @@ function h($text) {
     return htmlspecialchars($text);
 
 }
+
+function linkHelper($link, $name, array $options = null) {
+    $href = $classes = '';
+    if (is_array($link)) {
+        $href = ROOT . DS . $link['controller'] . DS . $link['action'];
+    } else if (is_string($link)) {
+        $href = strpos($link, ROOT) === false ? ROOT . $link : $link;
+    }
+    if (!is_null($options)) {
+        if (array_key_exists('class', $options)) {
+            if (is_array($options['class'])) {
+                $classes = implode(' ', $options['class']);
+            } else {
+                $classes = $options['class'];
+            }
+        }
+    }
+    return '<a href="' . $href . '"' . (strlen($classes) > 0 ? 'class="' . $classes . '"':'') . ' >' . $name . '</a>';
+}
