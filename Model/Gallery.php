@@ -67,7 +67,22 @@ class Gallery extends Model
         if (!$query->execute()) return false;
         $this->id = $this->connection->insert_id;
         return true;
+    }
 
+    public function setUserById($user_id) {
+        $this->user = (new User())->readById(intval($user_id));
+    }
+    
+    public function getGalleriesByUser(User $user) {
+        $uid = $user->getId();
+        $query = $this->connection->prepare("SELECT * FROM Gallery WHERE id_user = ?");
+        $query->bind_param('i', intval($uid));
+        $res = $this->readAllOrSingle($query);
+        $arr = [];
+        foreach ($res as $u) {
+            $arr[] = $this->constructGallery($u);
+        }
+        return $arr;
     }
 
     /**

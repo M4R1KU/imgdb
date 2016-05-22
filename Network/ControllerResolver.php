@@ -6,7 +6,7 @@ use MKWeb\ImgDB\Controller\Controller;
 /**
  * With the CommandResolver class you can get
  * an instance of the requested Controlle
- * @property  request
+ * @property Request request
  * @author Mario Kunz
  *
  */
@@ -63,7 +63,8 @@ class ControllerResolver {
 			if (!class_exists($class)) {
 				include_once("ControllerResolver.php");
 				$this->request->params['action'] = 'Index';
-				return 'NotFoundController';
+				$this->request->params['passed']['error'] = '404';
+				return 'ErrorController';
 			}
 			return $class;
 

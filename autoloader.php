@@ -14,11 +14,11 @@ const classes = [
     "MKWeb\\ImgDB\\Controller\\Controller" => __DIR__ . "/Controller/Controller.php",
     "MKWeb\\ImgDB\\Controller\\IndexController" => __DIR__ . "/Controller/IndexController.php",
     "MKWeb\\ImgDB\\Controller\\LoginController" => __DIR__ . "/Controller/LoginController.php",
-    "MKWeb\\ImgDB\\Controller\\NotFoundController" => __DIR__ . "/Controller/NotFoundController.php",
+    "MKWeb\\ImgDB\\Controller\\ErrorController" => __DIR__ . "/Controller/ErrorController.php",
 
     "MKWeb\\ImgDB\\Model\\Model" => __DIR__ . "/Model/Model.php",
     "MKWeb\\ImgDB\\Model\\User" => __DIR__ . "/Model/User.php",
-    //"\\MKWeb\\ImgDB\\Model\\Model" => ROOT . "/Model/Model.php"
+    "MKWeb\\ImgDB\\Model\\Gallery" => __DIR__ . "/Model/Gallery.php",
     
     "MKWeb\\ImgDB\\View\\View" => __DIR__ . "/View/View.php",
     

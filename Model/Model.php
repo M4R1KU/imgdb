@@ -15,7 +15,7 @@ class Model {
      */
 	public function __construct($currentTable)
 	{
-        $this->currentTable = ucfirst($currentTable);
+        $this->currentTable = ucfirst(str_replace(__NAMESPACE__ . '\\', '', $currentTable));
 		$this->connection = DBConnector::getInstance();
 	}
 
@@ -56,8 +56,9 @@ class Model {
     }
 
     public function readById($id) {
-        $query = $this->connection->prepare("SELECT * FROM {$this->currentTable} WHERE {$this->currentTable}_id = ?");
-        $query->bind_param('i', $id);
+        $str = "SELECT * FROM {$this->currentTable} WHERE {$this->currentTable}_id = ?";
+        $query = $this->connection->prepare($str);
+        $query->bind_param('i', intval($id));
         return $this->readAllOrSingle($query);
 
     }

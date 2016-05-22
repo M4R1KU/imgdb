@@ -57,11 +57,16 @@ use MKWeb\ImgDB\View\View;
          * contains all site url's where the user is allowed to go if he's not loggedin
          * @var array
          */
-        private $allowedsites = array('/login/index',
+        private $notLoggedInSites = ['/login/index',
                                       '/index/index',
                                       '/index/',
                                       '/index',
-                                      '/');
+                                      '/'];
+
+        private $loggedInDeniedSites = ['/login/add',
+                                        '/login/index',
+                                        '/login/',
+                                        '/login'];
 
 
         /**
@@ -80,11 +85,11 @@ use MKWeb\ImgDB\View\View;
              * it will redirect it to the login page except for the sites in the allowedsites array
              */
             if (!isset($this->request->session['user_id'])) {
-                if (!in_array($this->request->uri, $this->allowedsites)) {
+                if (!in_array($this->request->uri, $this->notLoggedInSites)) {
                     header('Location: ' . ROOT . '/login/index');
                 }
             } else {
-                if (!preg_match('/\/login.*(?=logout).*/', $this->request->uri) && $this->request->uri !== '/index/index') {
+                if (in_array($this->request->uri, $this->loggedInDeniedSites)) {
                     header('Location: ' . ROOT . '/index/index');
                 }
             }
@@ -108,7 +113,7 @@ use MKWeb\ImgDB\View\View;
 
         /**
          * invokes the controller action
-         * @return mixed Respnse object or false if no action is defined
+         * @return mixed Response object or false if no action is defined
          */
         public function invokeAction() {
             if (isset($this->request->params['action'])) {
