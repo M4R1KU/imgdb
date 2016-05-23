@@ -1,5 +1,5 @@
 # ImgDB
-School Projet: Modul 151
+School Projet: Modul 154
 
 An ImageDatabase for the cool people.
 
