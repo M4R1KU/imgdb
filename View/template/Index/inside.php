@@ -9,7 +9,7 @@
                 <div class="card z-depth-1-half">
                     <div class="card-content">
                         <span class="card-title"><a href="<?= ROOT ?>/gallery/index?id=<?= $gallery->getId() ?>" ><?= $gallery->getName(); ?></a>
-                            <i class="material-icons right privacy-icon tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?= ((bool) $gallery->getPrivate()) === true ? 'I am a private gallery.' : 'I am a public gallery.' ?>">lock_<?= ((bool) $gallery->getPrivate()) === true ? 'outline' : 'open' ?></i></span>
+                            <i class="material-icons right privacy-icon tooltipped" data-position="bottom" data-delay="50" data-tooltip="<?= ((bool) $gallery->isPrivate()) === true ? 'I am a private gallery.' : 'I am a public gallery.' ?>">lock_<?= ((bool) $gallery->isPrivate()) === true ? 'outline' : 'open' ?></i></span>
                         <p><?= $gallery->getDescription(); ?></p>
                     </div>
                     <div class="card-action">

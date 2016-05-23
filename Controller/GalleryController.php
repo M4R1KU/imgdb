@@ -10,13 +10,28 @@ namespace MKWeb\ImgDB\Controller;
 
 
 use MKWeb\ImgDB\Model\Gallery;
-use MKWeb\ImgDB\Model\User;
 
 class GalleryController extends Controller
 {
 
     public function index() {
         
+    }
+
+    public function delete() {
+        if (!isset($this->request->params['passed']['id'])){
+            return $this->redirect(ROOT . '/index/index?flash=Gallery id is missing.&title=Can\'t delete gallery.');
+        }
+        $id = intval($this->request->params['passed']['id']);
+        $gallery = (new Gallery())->readById($id);
+        if (intval($gallery->getUser()->getId()) !== intval($this->request->session['user_id'])) {
+            return $this->redirect(ROOT . '/index/index?flash=You are not allowed to delete this gallery&title=Missing permissions');
+        }
+        if ($gallery->delete()) {
+            return $this->redirect(ROOT . '/index/index');
+        } else {
+            return $this->redirect(ROOT . '/index/index?flash=Can\'t delete gallery. Unkown problem&title=Fail while deleting gallery.');
+        }
     }
     
     public function add() {

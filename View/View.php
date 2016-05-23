@@ -59,7 +59,12 @@ class View {
 
 		$this->template = $template;
 		ob_start();
-		$this->_content = file_exists($this->template) ? file_get_contents($this->template) : file_get_contents('View/template/404.php');
+		if (file_exists($this->template)) {
+			$this->_content = file_get_contents($this->template);
+		} else {
+			$this->assign('status_code', '404');
+			$this->_content = file_get_contents('View/template/Error/index.php');
+		}
 		include_once('View/layout/layout.php');
 		$this->body = ob_get_clean();
 		return $this->body;

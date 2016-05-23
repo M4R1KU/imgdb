@@ -49,6 +49,10 @@ class Model {
 
         return $rows;
     }
+    
+    protected function exec(\mysqli_stmt $query) {
+        return $query->execute();
+    }
 
     public function readAll() {
         $query = "SELECT * FROM {$this->currentTable}";

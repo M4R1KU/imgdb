@@ -84,6 +84,16 @@ class Gallery extends Model
         }
         return $arr;
     }
+    
+    public function deleteById($id) {
+        $query = $this->connection->prepare("DELETE FROM Gallery WHERE gallery_id = ?");
+        $query->bind_param('i', intval($id));
+        return $this->exec($query);
+    }
+    
+    public function delete() {
+        $this->deleteById($this->id);
+    }
 
     /**
      * return an array with every gallery in it which are available in the database
@@ -113,7 +123,7 @@ class Gallery extends Model
     }
 
     /**
-     * @return null
+     * @return int
      */
     public function getId()
     {
@@ -121,7 +131,7 @@ class Gallery extends Model
     }
 
     /**
-     * @param null $id
+     * @param int $id
      */
     public function setId($id)
     {
@@ -129,7 +139,7 @@ class Gallery extends Model
     }
 
     /**
-     * @return null
+     * @return string
      */
     public function getName()
     {
@@ -137,7 +147,7 @@ class Gallery extends Model
     }
 
     /**
-     * @param null $name
+     * @param string $name
      */
     public function setName($name)
     {
@@ -145,7 +155,7 @@ class Gallery extends Model
     }
 
     /**
-     * @return null
+     * @return string
      */
     public function getDescription()
     {
@@ -153,7 +163,7 @@ class Gallery extends Model
     }
 
     /**
-     * @param null $description
+     * @param string $description
      */
     public function setDescription($description)
     {
@@ -161,7 +171,7 @@ class Gallery extends Model
     }
 
     /**
-     * @return null
+     * @return User
      */
     public function getUser()
     {
@@ -169,7 +179,7 @@ class Gallery extends Model
     }
 
     /**
-     * @param null $user
+     * @param User $user
      */
     public function setUser($user)
     {
@@ -177,15 +187,15 @@ class Gallery extends Model
     }
 
     /**
-     * @return null
+     * @return boolean
      */
-    public function getPrivate()
+    public function isPrivate()
     {
         return $this->private;
     }
 
     /**
-     * @param null $private
+     * @param boolean $private
      */
     public function setPrivate($private)
     {
