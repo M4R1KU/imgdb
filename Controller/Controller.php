@@ -117,7 +117,8 @@ use MKWeb\ImgDB\View\View;
          */
         public function invokeAction() {
             if (isset($this->request->params['action'])) {
-                return call_user_func(array($this, $this->request->params['action']));
+                if (!is_callable([$this, $this->request->params['action']])) return $this->redirect(ROOT . '/Error/Index?error=404');
+                return call_user_func([$this, $this->request->params['action']]);
             }
             return false;
         }

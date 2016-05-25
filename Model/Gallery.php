@@ -47,7 +47,10 @@ class Gallery extends Model
      * @return Gallery object
      */
     public static function constructGallery($gallery) {
-        if ($gallery instanceof Gallery) {
+        if ($gallery === false) {
+            return false;
+        }
+        else if ($gallery instanceof Gallery) {
             return $gallery;
         }
         else if (is_array($gallery)) {

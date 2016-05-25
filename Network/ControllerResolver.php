@@ -55,7 +55,7 @@ class ControllerResolver {
 			$file = $this->path . ucfirst($controller) . 'Controller.php';
 			if (!file_exists($file)) {
 				if (empty($this->defaultcontroller)) {
-					return;
+					return null;
 				}
 				$file = "{$this->path}{$this->defaultcontroller}Controller.php";
 			}

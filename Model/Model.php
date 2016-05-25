@@ -40,8 +40,11 @@ class Model {
 
         $rows = array();
         /** @var \mysqli_result $result */
-        if ($result->num_rows === 1)
+        if ($result->num_rows === 1) {
             return $result->fetch_assoc();
+        } else if ($result->num_rows === 0) {
+            return false;
+        }
 
         while ($row = $result->fetch_assoc()) {
             $rows[] = $row;

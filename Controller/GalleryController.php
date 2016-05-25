@@ -15,7 +15,14 @@ class GalleryController extends Controller
 {
 
     public function index() {
-        
+        if (!isset($this->request->params['passed']['id'])) {
+            return $this->redirect(ROOT . '/Error/index?error=400&msg=Gallery id is missing.');
+        }
+        $id = intval($this->request->params['passed']['id']);
+        $gallery = (new Gallery())->readById($id);
+        if ($gallery === false) return $this->redirect(ROOT . '/Error/index?error=404&msg=Can\'t find gallery.');
+        $this->view->assign('gallery', $gallery);
+
     }
 
     public function delete() {
@@ -31,6 +38,12 @@ class GalleryController extends Controller
             return $this->redirect(ROOT . '/index/index');
         } else {
             return $this->redirect(ROOT . '/index/index?flash=Can\'t delete gallery. Unkown problem&title=Fail while deleting gallery.');
+        }
+    }
+    
+    public function edit() {
+        if (!isset($this->request->params['passed']['id'])) {
+            return $this->redirect(ROOT . '/index/index?flash=Gallery id is missing.&title=Can\'t edit gallery.');
         }
     }
     
