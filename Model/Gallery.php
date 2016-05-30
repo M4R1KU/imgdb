@@ -47,10 +47,7 @@ class Gallery extends Model
      * @return Gallery object
      */
     public static function constructGallery($gallery) {
-        if ($gallery === false) {
-            return false;
-        }
-        else if ($gallery instanceof Gallery) {
+        if ($gallery instanceof Gallery) {
             return $gallery;
         }
         else if (is_array($gallery)) {
@@ -81,6 +78,7 @@ class Gallery extends Model
         $query = $this->connection->prepare("SELECT * FROM Gallery WHERE id_user = ?");
         $query->bind_param('i', intval($uid));
         $res = $this->readAllOrSingle($query);
+        if (!isset($res[0])) return [$this->constructGallery($res)];
         $arr = [];
         foreach ($res as $u) {
             $arr[] = $this->constructGallery($u);
@@ -95,7 +93,7 @@ class Gallery extends Model
     }
     
     public function delete() {
-        $this->deleteById($this->id);
+        return $this->deleteById($this->id);
     }
 
     /**

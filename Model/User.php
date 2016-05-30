@@ -33,10 +33,7 @@ class User extends Model {
      * @return User object
      */
     public static function constructUser($user) {
-        if ($user === false) {
-            return false;
-        }
-        else if ($user instanceof User) {
+        if ($user instanceof User) {
             return $user;
         }
         else if (is_array($user)) {

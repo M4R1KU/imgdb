@@ -70,6 +70,7 @@ class Request
         $config = array(
             'query' => $_GET,
             'post' => $_POST,
+			'files' => $_FILES,
 			'base' => $base,
 			'webroot' => $base . '/',
             'session' => $_SESSION
@@ -158,8 +159,29 @@ class Request
 			$this->params['action'] = 'index';
 		}
 
-		$this->params['passed'] = array_merge($_GET, $_POST);
+		$this->params['passed'] = array_merge($_GET, $_POST, $_FILES);
 
+    }
+
+    public function referer()
+    {
+        $ref = $_SERVER['HTTP_REFERER'];
+
+        $local = strpos($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST']) > 0;
+
+        $base = (empty($_SERVER['HTTPS']) ? 'http://' : 'https://') . $_SERVER['HTTP_HOST'];
+        if (!empty($ref) && !empty($base)) {
+            if ($local && strpos($ref, $base) === 0) {
+                $ref = substr($ref, strlen($base));
+                if ($ref[0] !== '/') {
+                    $ref = '/' . $ref;
+                }
+                return $ref;
+            } elseif (!$local) {
+                return $ref;
+            }
+        }
+        return '/';
     }
 
 }

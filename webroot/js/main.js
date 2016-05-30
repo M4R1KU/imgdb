@@ -10,6 +10,7 @@ $(document).ready(function() {
 	});
 
     $('.add-gallery-modal-trigger').leanModal({dismissible: true});
+    $('.add-image-modal-trigger').leanModal({dismissible: true});
 
     $('.tooltip-toggle').focus(function() {
         $('body').append('<span class="tooltip z-depth-4 animated fadeIn">' + $(this).attr('data-content') + '</span>');

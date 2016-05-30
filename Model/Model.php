@@ -24,9 +24,9 @@ class Model {
      * If there are multiple lines, read them all into an array and return
      *
      * @param $statementOrQuery string|\mysqli_stmt String or prepared statement
-     * @return array|null
+     * @return array
      */
-    protected function readAllOrSingle($statementOrQuery)
+    protected function readAllArray($statementOrQuery)
     {
         if (is_string($statementOrQuery)) {
             $result = $this->connection->query($statementOrQuery);
@@ -40,17 +40,28 @@ class Model {
 
         $rows = array();
         /** @var \mysqli_result $result */
-        if ($result->num_rows === 1) {
-            return $result->fetch_assoc();
-        } else if ($result->num_rows === 0) {
-            return false;
-        }
-
         while ($row = $result->fetch_assoc()) {
             $rows[] = $row;
         }
 
         return $rows;
+    }
+
+    /**
+     * If there is only one result, return the result
+     * If there are multiple lines, read them all into an array and return
+     *
+     * @param $statementOrQuery string|\mysqli_stmt String or prepared statement
+     * @return array
+     */
+    protected function readAllOrSingle($statementOrQuery)
+    {
+        $resultArray = $this->readAllArray($statementOrQuery);
+
+        if (sizeof($resultArray) == 1)
+            return $resultArray[0];
+
+        return $resultArray;
     }
     
     protected function exec(\mysqli_stmt $query) {

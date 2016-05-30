@@ -61,6 +61,13 @@ class GalleryController extends Controller
         $gallery->setDescription($description);
         $gallery->setPrivate($private);
         $gallery->create();
+
+        $dirName = sha1($gallery->getName() . $gallery->getId()) . '/';
+        $galleryDir = FINAL_GALLERY_DIR . $dirName;
+        $galleryThumbnailDir = THUMBNAIL_GALLERY_DIR . $dirName;
+        if (!is_dir($galleryDir)) mkdir($galleryDir);
+        if (!is_dir($galleryThumbnailDir)) mkdir($galleryThumbnailDir);
+        
         $this->redirect(ROOT . '/index/index');
     }
 
