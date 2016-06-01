@@ -31,7 +31,7 @@ class Image extends Model {
      * @param null $file_path
      * @param $thumbnail_path
      */
-    public function __construct($id = null, $gallery = null, $title = null, $description = null, $file_path = null, $thumbnail_path)
+    public function __construct($id = null, $gallery = null, $title = null, $description = null, $file_path = null, $thumbnail_path = null)
     {
         parent::__construct(__CLASS__);
         $this->id = $id;
@@ -66,7 +66,7 @@ class Image extends Model {
      */
     public function create() {
         $query = $this->connection->prepare("INSERT INTO Image (id_gallery, title, description, file_path, thumbnail_path) VALUES (?, ?, ?, ?, ?)");
-        $query->bind_param('issi', $this->gallery->getId(), $this->title, $this->description, $this->file_path, $this->thumbnail_path);
+        $query->bind_param('issss', $this->gallery->getId(), $this->title, $this->description, $this->file_path, $this->thumbnail_path);
         if (!$query->execute()) return false;
         $this->id = $this->connection->insert_id;
         return true;

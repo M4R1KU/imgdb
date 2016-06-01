@@ -46,3 +46,16 @@ function linkHelper($link, $name, array $options = null) {
     }
     return '<a href="' . $href . '"' . (strlen($classes) > 0 ? 'class="' . $classes . '"':'') . ' >' . $name . '</a>';
 }
+
+function resizeAndMoveImage($galleryDir, $galleryThumbnailDir, $newFilename) {
+    list($width, $height) = getimagesize($galleryDir . $newFilename);
+    $newHeight = THUMBNAIL_HEIGHT;
+    $newWidth = $width / ($height / THUMBNAIL_HEIGHT);
+
+    $thumb = imagecreatetruecolor($newWidth, $newHeight);
+    $source = imagecreatefromjpeg($galleryDir . $newFilename);
+
+    imagecopyresized($thumb, $source, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+
+    imagejpeg($thumb, $galleryThumbnailDir . $newFilename);
+}

@@ -10,11 +10,14 @@ namespace MKWeb\ImgDB\Controller;
 
 
 use MKWeb\ImgDB\Model\Gallery;
+use MKWeb\ImgDB\Model\Image;
+use MKWeb\ImgDB\Model\ImageTag;
+use MKWeb\ImgDB\Model\Tag;
 
 class ImageController extends Controller {
     
     public function index() {
-       
+        
     }
     
     public function add() {
@@ -26,6 +29,7 @@ class ImageController extends Controller {
         $id = intval($this->request->params['passed']['image_add_gallery_id']);
         $file = $this->request->params['passed']['image_add_file'];
         $filename = $this->request->params['passed']['image_add_filename'];
+        $tagsRequest = explode(',', $this->request->params['passed']['image_add_tags']);
 
         $gallery = (new Gallery())->readById($id);
         $dirName = sha1($gallery->getName() . $gallery->getId()) . '/';
@@ -34,23 +38,28 @@ class ImageController extends Controller {
 
         if (!in_array($file['type'], $allowed_types)) return $this->redirect(ROOT . '/gallery/index?id=' . $id . '&title=Shit2');
 
-        $newfilename = hash('sha256', $filename . time()) . '.' . end(explode('.', $file['name']));
+        $newFilename = hash('sha256', $filename . time()) . '.' . end(explode('.', $file['name']));
 
-        if (move_uploaded_file($file['tmp_name'], $galleryDir . $newfilename) === false) {
+        $thumbnail_path = $galleryThumbnailDir . $newFilename;
+        $file_path = $galleryDir . $newFilename;
+        resizeAndMoveImage($galleryDir, $galleryThumbnailDir, $newFilename);
+
+        if (move_uploaded_file($file['tmp_name'], $galleryDir . $newFilename) === false) {
             return $this->redirect(ROOT . '/gallery/index?id=' . $id);
         }
 
-        list($width, $height) = getimagesize($galleryDir . $newfilename);
-        $newheight = THUMBNAIL_HEIGHT;
-        $newwidth = $width / ($height / THUMBNAIL_HEIGHT);
+        $image = new Image(null, $gallery, null, null, $file_path, $thumbnail_path);
+        $image->create();
 
-        $thumb = imagecreatetruecolor($newwidth, $newheight);
-        $source = imagecreatefromjpeg($galleryDir . $newfilename);
-
-        imagecopyresized($thumb, $source, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
-
-        imagejpeg($thumb, $galleryThumbnailDir . $newfilename);
-
+        if (count($tagsRequest) > 0) {
+            foreach ($tagsRequest as $tag) {
+                $t = new Tag();
+                if (!$t->exists($tag)) {
+                    $t->create();
+                }
+                (new ImageTag(null, $image, $t))->create();
+            }
+        }
         return $this->redirect(ROOT . '/gallery/index?id=' . $id);
     }
 

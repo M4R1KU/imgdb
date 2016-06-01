@@ -68,5 +68,28 @@ $(document).ready(function() {
         }
     }
 
+    $('#image_add_tags_fields').keyup(function() {
+        var tag_field = $('#image_add_tags_fields');
+        if ($(tag_field).val().length > 0) {
+            var tags = $(tag_field).val().split(" ");
+            $(tag_field).siblings('input').remove();
+            $(tag_field).siblings('div.chip').remove();
+            $(tag_field).after('<input type="hidden" name="image_add_tags" id="image_add_tags" value="' + tags + '">');
+            for (var i = 0; i < tags.length; i++) {
+                if (tags[i] != "") {
+                    $(tag_field).after('<div class="chip">' + tags[i] + '</div>')
+                }
+            }
+        } else {
+            $(tag_field).siblings('input').remove();
+            $(tag_field).siblings('div.chip').remove();
+        }
+    });
+
+    $('#image_add_reset').click(function() {
+        $('#image_add_tags_fields').siblings('div.chip').remove();
+    });
+
+
 });
 

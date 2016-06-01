@@ -22,6 +22,8 @@ const classes = [
     "MKWeb\\ImgDB\\Model\\User" => __DIR__ . "/Model/User.php",
     "MKWeb\\ImgDB\\Model\\Gallery" => __DIR__ . "/Model/Gallery.php",
     "MKWeb\\ImgDB\\Model\\Image" => __DIR__ . "/Model/Image.php",
+    "MKWeb\\ImgDB\\Model\\Tag" => __DIR__ . "/Model/Tag.php",
+    "MKWeb\\ImgDB\\Model\\ImageTag" => __DIR__ . "/Model/ImageTag.php",
     
     
     "MKWeb\\ImgDB\\View\\View" => __DIR__ . "/View/View.php",
@@ -38,13 +40,14 @@ const classes = [
 
 /**
  * @param $className
+ * @return bool
+ * @throws Exception
  */
 function __autoload($className) {
     $map = classes;
     if (isset($map[$className])) {
         /** @noinspection PhpIncludeInspection */
         require(classes[$className]);
-
         return true;
     } else {
         throw new Exception("Unknown Class " . $className);
