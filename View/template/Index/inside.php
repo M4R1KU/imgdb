@@ -2,7 +2,7 @@
 <div class="personal-galleries row">
     <h4>Your personal galleries:</h4>
     <?php /** @var \MKWeb\ImgDB\Model\Gallery $gallery */
-    if (sizeof($this->user_galleries) > 0):
+    if ($this->user_galleries):
         foreach ($this->user_galleries as $row): ?>
             <div class="row">
                 <?php foreach ($row as $gallery): ?>

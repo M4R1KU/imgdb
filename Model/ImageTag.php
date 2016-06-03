@@ -48,6 +48,7 @@ class ImageTag extends Model {
         else if (is_array($imageTag)) {
             return new static($imageTag['image_tag_id'], $imageTag['id_image'], $imageTag['id_tag']);
         }
+        else return null;
     }
 
     /**

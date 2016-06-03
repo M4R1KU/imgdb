@@ -39,6 +39,7 @@ class User extends Model {
         else if (is_array($user)) {
             return new static($user['user_id'], $user['email'], $user['nickname'], $user['password']);
         }
+        else return null;
     }
 
     /**
@@ -66,7 +67,7 @@ class User extends Model {
         $query = $this->connection->prepare("SELECT * FROM User WHERE email like ?");
         $query->bind_param('s', $e);
         $res = $this->readAllOrSingle($query);
-        return self::constructUser($res);
+        return self::constructUser($res ? $res : null);
         
     }
 
@@ -82,11 +83,10 @@ class User extends Model {
         if (!$query->execute()) return false;
         $this->id = $this->connection->insert_id;
         return true;
-
     }
     
-    public function checkLogin($password) {
-        return password_verify($password, $this->getPassword());
+    public function checkLogin($pw) {
+        return password_verify($pw, $this->password);
     }
 
 

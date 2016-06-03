@@ -31,7 +31,7 @@ function h($text) {
 function linkHelper($link, $name, array $options = null) {
     $href = $classes = '';
     if (is_array($link)) {
-        $href = ROOT . DS . $link['controller'] . DS . $link['action'];
+        $href = ROOT . $link['controller'] . DS . $link['action'];
     } else if (is_string($link)) {
         $href = strpos($link, ROOT) === false ? ROOT . $link : $link;
     }
@@ -58,4 +58,12 @@ function resizeAndMoveImage($galleryDir, $galleryThumbnailDir, $newFilename) {
     imagecopyresized($thumb, $source, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
 
     imagejpeg($thumb, $galleryThumbnailDir . $newFilename);
+}
+
+function getGalleryHash(\MKWeb\ImgDB\Model\Gallery $gallery) {
+
+}
+
+function getImageHas(\MKWeb\ImgDB\Model\Image $imasge) {
+
 }

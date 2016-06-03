@@ -20,7 +20,6 @@ class Image extends Model {
      */
     private $gallery;
     private $file_path;
-    private $thumbnail_path;
 
     /**
      * Image constructor.
@@ -29,17 +28,14 @@ class Image extends Model {
      * @param null $title
      * @param $description
      * @param null $file_path
-     * @param $thumbnail_path
      */
-    public function __construct($id = null, $gallery = null, $title = null, $description = null, $file_path = null, $thumbnail_path = null)
-    {
+    public function __construct($id = null, $gallery = null, $title = null, $description = null, $file_path = null) {
         parent::__construct(__CLASS__);
         $this->id = $id;
         $this->title = $title;
         $this->description = $description;
         $this->gallery = $gallery;
         $this->file_path = $file_path;
-        $this->thumbnail_path = $thumbnail_path;
     }
 
     /**
@@ -54,8 +50,9 @@ class Image extends Model {
             return $image;
         }
         else if (is_array($image)) {
-            return new static($image['image_id'],(new Gallery)->readById($image['id_gallery']), $image['title'], $image['description'], $image['file_path'], $image['thumbnail_path']);
+            return new static($image['image_id'],(new Gallery)->readById($image['id_gallery']), $image['title'], $image['description'], $image['file_path']);
         }
+        else return null;
     }
 
     /**
@@ -65,8 +62,8 @@ class Image extends Model {
      * @return bool
      */
     public function create() {
-        $query = $this->connection->prepare("INSERT INTO Image (id_gallery, title, description, file_path, thumbnail_path) VALUES (?, ?, ?, ?, ?)");
-        $query->bind_param('issss', $this->gallery->getId(), $this->title, $this->description, $this->file_path, $this->thumbnail_path);
+        $query = $this->connection->prepare("INSERT INTO Image (id_gallery, title, description, file_path) VALUES (?, ?, ?, ?)");
+        $query->bind_param('isss', $this->gallery->getId(), $this->title, $this->description, $this->file_path);
         if (!$query->execute()) return false;
         $this->id = $this->connection->insert_id;
         return true;
@@ -81,6 +78,7 @@ class Image extends Model {
         $query = $this->connection->prepare("SELECT * FROM Image WHERE id_gallery = ?");
         $query->bind_param('i', intval($gid));
         $res = $this->readAllOrSingle($query);
+        if (!$res) return $res;
         if (!isset($res[0])) return [$this->constructImage($res)];
         $arr = [];
         foreach ($res as $u) {
@@ -205,24 +203,4 @@ class Image extends Model {
     {
         $this->file_path = $file_path;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getThumbnailPath()
-    {
-        return $this->thumbnail_path;
-    }
-
-    /**
-     * @param mixed $thumbnail_path
-     */
-    public function setThumbnailPath($thumbnail_path)
-    {
-        $this->thumbnail_path = $thumbnail_path;
-    }
-
-    
-
-
 }

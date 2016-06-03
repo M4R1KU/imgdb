@@ -2,7 +2,12 @@
 <h1><?= $this->gallery->getName(); ?> <small>by <?= $this->gallery->getUser()->getNickname() ?></small></h1>
 <p><?= $this->gallery->getDescription(); ?></p>
 <div class="row">
-
+    <?php /**
+     * @var MKWeb\ImgDB\Model\Image $image
+     */
+    foreach($this->images as $image): ?>
+        <img src="<?= REL_THUMBNAIL_GALLERY_DIR . sha1($this->gallery->getName() . $this->gallery->getId()) . '/' . $image->getFilePath() ?>">
+    <?php endforeach; ?>
 </div>
 <div class="fixed-action-btn" style="bottom: 45px; right: 45px;">        
     <a href="#add-image-modal" class="btn-floating btn-large waves-effect waves-light red add-image-modal-trigger">

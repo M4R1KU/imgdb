@@ -39,6 +39,7 @@ class Tag extends Model {
         else if (is_array($tag)) {
             return new static($tag['tag_id'], $tag['name']);
         }
+        else return null;
     }
 
     /**
@@ -76,7 +77,7 @@ class Tag extends Model {
         if (!$result = $this->readAllOrSingle($query)) {
             return false;
         } else {
-            $this->id = is_array($result[0]) ? $result[0]['tag_id'] : $result['tag_id'];
+            $this->id = isset($result['tag_id']) ? $result['tag_id'] : $result[0]['tag_id'];
             return true;
         }
     }

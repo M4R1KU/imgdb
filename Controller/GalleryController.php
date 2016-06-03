@@ -10,6 +10,7 @@ namespace MKWeb\ImgDB\Controller;
 
 
 use MKWeb\ImgDB\Model\Gallery;
+use MKWeb\ImgDB\Model\Image;
 
 class GalleryController extends Controller
 {
@@ -20,7 +21,10 @@ class GalleryController extends Controller
         }
         $id = intval($this->request->params['passed']['id']);
         $gallery = (new Gallery())->readById($id);
-        if ($gallery === false) return $this->redirect(ROOT . '/Error/index?error=404&msg=Can\'t find gallery.');
+        if (!$gallery) return $this->redirect(ROOT . '/Error/index?error=404&msg=Can\'t find gallery.');
+
+        $images = (new Image())->getImagesByGallery($gallery);
+        $this->view->assign('images', $images);
         $this->view->assign('gallery', $gallery);
 
     }
@@ -63,8 +67,8 @@ class GalleryController extends Controller
         $gallery->create();
 
         $dirName = sha1($gallery->getName() . $gallery->getId()) . '/';
-        $galleryDir = FINAL_GALLERY_DIR . $dirName;
-        $galleryThumbnailDir = THUMBNAIL_GALLERY_DIR . $dirName;
+        $galleryDir = ABS_FINAL_GALLERY_DIR . $dirName;
+        $galleryThumbnailDir = ABS_THUMBNAIL_GALLERY_DIR . $dirName;
         if (!is_dir($galleryDir)) mkdir($galleryDir);
         if (!is_dir($galleryThumbnailDir)) mkdir($galleryThumbnailDir);
         

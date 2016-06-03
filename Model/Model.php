@@ -43,7 +43,6 @@ class Model {
         while ($row = $result->fetch_assoc()) {
             $rows[] = $row;
         }
-
         return $rows;
     }
 
@@ -78,7 +77,6 @@ class Model {
         $query = $this->connection->prepare($str);
         $query->bind_param('i', intval($id));
         return $this->readAllOrSingle($query);
-
     }
 }
 

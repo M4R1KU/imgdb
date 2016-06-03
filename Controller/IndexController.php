@@ -20,7 +20,7 @@ class IndexController extends Controller {
                     $galleries[$j][] = $out[$i];
                     if (($i+1) % 3 == 0) $j++;
                 }
-            } else {
+            } else if ($out) {
                 $galleries[0] = $out;
             }
             

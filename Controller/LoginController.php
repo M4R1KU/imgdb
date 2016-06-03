@@ -27,7 +27,7 @@ class LoginController extends Controller {
         $email = h($this->request->params['passed']['login_email']);
         $pw = h($this->request->params['passed']['login_password']);
         $user = (new User())->constructUserByEmail($email);
-        if ($user->checkLogin($pw)) {
+        if ($user && $user->checkLogin($pw)) {
             $_SESSION['user_id'] = $user->getId();
             $_SESSION['nickname'] = $user->getNickname();
             return $this->redirect(ROOT . '/index/index');

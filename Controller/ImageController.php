@@ -33,22 +33,22 @@ class ImageController extends Controller {
 
         $gallery = (new Gallery())->readById($id);
         $dirName = sha1($gallery->getName() . $gallery->getId()) . '/';
-        $galleryDir = FINAL_GALLERY_DIR . $dirName;
-        $galleryThumbnailDir = THUMBNAIL_GALLERY_DIR . $dirName;
+        $galleryDir = ABS_FINAL_GALLERY_DIR . $dirName;
+        $galleryThumbnailDir = ABS_THUMBNAIL_GALLERY_DIR . $dirName;
 
         if (!in_array($file['type'], $allowed_types)) return $this->redirect(ROOT . '/gallery/index?id=' . $id . '&title=Shit2');
 
         $newFilename = hash('sha256', $filename . time()) . '.' . end(explode('.', $file['name']));
 
-        $thumbnail_path = $galleryThumbnailDir . $newFilename;
         $file_path = $galleryDir . $newFilename;
-        resizeAndMoveImage($galleryDir, $galleryThumbnailDir, $newFilename);
 
-        if (move_uploaded_file($file['tmp_name'], $galleryDir . $newFilename) === false) {
+        if (move_uploaded_file($file['tmp_name'], $file_path) === false) {
             return $this->redirect(ROOT . '/gallery/index?id=' . $id);
         }
 
-        $image = new Image(null, $gallery, null, null, $file_path, $thumbnail_path);
+        resizeAndMoveImage($galleryDir, $galleryThumbnailDir, $newFilename);
+
+        $image = new Image(null, $gallery, null, null, $newFilename);
         $image->create();
 
         if (count($tagsRequest) > 0) {

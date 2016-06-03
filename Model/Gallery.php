@@ -53,6 +53,7 @@ class Gallery extends Model
         else if (is_array($gallery)) {
             return new static($gallery['gallery_id'],(new User)->readById($gallery['id_user']), $gallery['name'], $gallery['description'], $gallery['private']);
         }
+        else return null;
     }
 
     /**
@@ -78,6 +79,7 @@ class Gallery extends Model
         $query = $this->connection->prepare("SELECT * FROM Gallery WHERE id_user = ?");
         $query->bind_param('i', intval($uid));
         $res = $this->readAllOrSingle($query);
+        if (!$res) return $res;
         if (!isset($res[0])) return [$this->constructGallery($res)];
         $arr = [];
         foreach ($res as $u) {
@@ -120,7 +122,9 @@ class Gallery extends Model
      */
     public function readById($id)
     {
-        return $this->constructGallery(parent::readById($id));
+        $result = $this->constructGallery(parent::readById($id));
+        //error_log(var_export($result));
+        return $result;
     }
 
     /**
