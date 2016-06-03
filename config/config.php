@@ -4,12 +4,11 @@
 define('DS', '/');
 
 //Root Directory of the project
-$p = str_replace($_SERVER['DOCUMENT_ROOT'], '', str_replace('\\', DS, dirname(__DIR__))) . '/webroot/';
-define('ROOT', $_SERVER['DOCUMENT_ROOT'] == $p ? $p : '/');
+define('ROOT', str_replace($_SERVER['DOCUMENT_ROOT'], '', str_replace('\\', DS, dirname(__DIR__))));
 
 
 //webroot of the project (contains css, js etc.)
-define('WEBROOT', ROOT . 'webroot/');
+define('WEBROOT', ROOT . DS . 'webroot/');
 
 define('DIR_NAME', dirname(dirname(__DIR__)));
 
@@ -25,12 +24,6 @@ define('DB_NAME', 'imgdb');
 define('DB_USER', 'imgdb');
 define('DB_PW', '');
 define('DB_PORT', '3306');
-
-print_r(ROOT . '<br>');
-print_r(WEBROOT . '<br>');
-print_r($_SERVER['DOCUMENT_ROOT'] . '<br>');
-print_r(DIR_NAME . '<br>');
-print_r(__DIR__ . '<br>');
 
 // if it is necessary you can define more constants
 

@@ -31,7 +31,7 @@ function h($text) {
 function linkHelper($link, $name, array $options = null) {
     $href = $classes = '';
     if (is_array($link)) {
-        $href = ROOT . $link['controller'] . DS . $link['action'];
+        $href = ROOT . DS . $link['controller'] . DS . $link['action'];
     } else if (is_string($link)) {
         $href = strpos($link, ROOT) === false ? ROOT . $link : $link;
     }
