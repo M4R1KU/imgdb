@@ -63,9 +63,9 @@ class View {
 			$this->_content = file_get_contents($this->template);
 		} else {
 			$this->assign('status_code', '404');
-			$this->_content = file_get_contents('View/template/Error/index.php');
+			$this->_content = file_get_contents('../View/template/Error/index.php');
 		}
-		include_once('View/layout/layout.php');
+		include_once('../View/layout/layout.php');
 		$this->body = ob_get_clean();
 		return $this->body;
 	}

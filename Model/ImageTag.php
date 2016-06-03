@@ -46,7 +46,7 @@ class ImageTag extends Model {
             return $imageTag;
         }
         else if (is_array($imageTag)) {
-            return new static($imageTag['image_tag_id'], $imageTag['id_image'], $imageTag['id_tag']);
+            return new static($imageTag['image_tag_id'], (new Image)->readById($imageTag['id_image']), (new Tag)->readById($imageTag['id_tag']));
         }
         else return null;
     }
@@ -73,6 +73,28 @@ class ImageTag extends Model {
 
     public function delete() {
         return $this->deleteById($this->id);
+    }
+    
+    public function readByImage(Image $img) {
+        $query = $this->connection->prepare("SELECT * FROM Image_Tag WHERE id_image = ?");
+        $query->bind_param('i', intval($img->getId()));
+        $res = $this->readAllOrSingle($query);
+        $out = [];
+        foreach ($res as $imageTag) {
+            $out[] = $this->constructImageTag($imageTag);
+        }
+        return $out;
+    }
+    
+    public function readByTag(Tag $tag) {
+        $query = $this->connection->prepare("SELECT * FROM Image_Tag WHERE id_tag = ?");
+        $query->bind_param('i', intval($tag->getId()));
+        $res = $this->readAllOrSingle($query);
+        $out = [];
+        foreach ($res as $imageTag) {
+            $out[] = $this->constructImageTag($imageTag);
+        }
+        return $out;
     }
 
     /**
@@ -101,5 +123,55 @@ class ImageTag extends Model {
     {
         return $this->constructImageTag(parent::readById($id));
     }
+
+    /**
+     * @return null
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param null $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return Image
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * @param Image $image
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
+    }
+
+    /**
+     * @return Tag
+     */
+    public function getTag()
+    {
+        return $this->tag;
+    }
+
+    /**
+     * @param Tag $tag
+     */
+    public function setTag($tag)
+    {
+        $this->tag = $tag;
+    }
+    
+    
 
 }

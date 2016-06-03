@@ -73,6 +73,10 @@ class Image extends Model {
         $this->gallery = (new User())->readById(intval($gallery_id));
     }
 
+    /**
+     * @param Gallery $gallery
+     * @return array Image
+     */
     public function getImagesByGallery(Gallery $gallery) {
         $gid = $gallery->getId();
         $query = $this->connection->prepare("SELECT * FROM Image WHERE id_gallery = ?");
@@ -203,4 +207,11 @@ class Image extends Model {
     {
         $this->file_path = $file_path;
     }
+
+    function __toString()
+    {
+        return $this->id ."";
+    }
+
+
 }

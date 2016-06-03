@@ -1,3 +1,4 @@
+<?php include '../View/layout/flash.php' ?>
 <h1>Hello <?= $this->request->session['nickname'] ?></h1>
 <div class="personal-galleries row">
     <h4>Your personal galleries:</h4>
@@ -10,7 +11,7 @@
                         <div class="card z-depth-1-half">
                             <div class="card-content">
                         <span class="card-title"><a
-                                href="<?= ROOT ?>/gallery/index?id=<?= $gallery->getId() ?>"><?= $gallery->getName(); ?></a>
+                                href="/gallery/index?id=<?= $gallery->getId() ?>"><?= $gallery->getName(); ?></a>
                             <i class="material-icons right privacy-icon tooltipped" data-position="bottom"
                                data-delay="50"
                                data-tooltip="<?= ((bool)$gallery->isPrivate()) === true ? 'I am a private gallery.' : 'I am a public gallery.' ?>">lock_<?= ((bool)$gallery->isPrivate()) === true ? 'outline' : 'open' ?></i></span>
@@ -41,7 +42,7 @@
         <div class="row">
             <div class="col m6 offset-m3 s12">
                 <h4>Add a new gallery.</h4>
-                <form action="<?= ROOT ?>/gallery/add" method="post">
+                <form action="/gallery/add" method="post">
                     <div class="row">
                         <div class="input-field col s12">
                             <input type="text" name="gallery_add_name" id="gallery_add_name" maxlength="50" length="50">

@@ -14,15 +14,11 @@ use MKWeb\ImgDB\Util\Validator;
 class LoginController extends Controller {
 
     public function index() {
-        if (isset($this->request->params['passed']['flash']) && isset($this->request->params['passed']['title'])) {
-            $this->view->assign('flash', urldecode($this->request->params['passed']['flash']));
-            $this->view->assign('title', urldecode($this->request->params['passed']['title']));
-        }
     }
 
     public function login() {
         if (!Validator::validateEmail($this->request->params['passed']['login_email']) || empty($this->request->params['passed']['login_password'])) {
-            return $this->redirect(ROOT . '/login/index?flash=Some Information is missing or wrong&title=Login failed');
+            return $this->redirect('/login/index' . generateFlash('Login failed. Some Information is missing or wrong.', 'error'));
         }
         $email = h($this->request->params['passed']['login_email']);
         $pw = h($this->request->params['passed']['login_password']);
@@ -30,15 +26,15 @@ class LoginController extends Controller {
         if ($user && $user->checkLogin($pw)) {
             $_SESSION['user_id'] = $user->getId();
             $_SESSION['nickname'] = $user->getNickname();
-            return $this->redirect(ROOT . '/index/index');
+            return $this->redirect('/index/index');
         }
-        return $this->redirect(ROOT . '/login/index?flash=Your password or username is incorrect&title=Login failed');
+        return $this->redirect('/login/index' . generateFlash('Login failed. Your password or username is incorrect.', 'error'));
     }
 
     public function logout() {
         unset($_SESSION);
         session_destroy();
-        return $this->redirect(ROOT . '/index/index');
+        return $this->redirect('/index/index');
     }
 
     public function add() {
@@ -54,9 +50,9 @@ class LoginController extends Controller {
             $user->create();
             $_SESSION['user_id'] = $user->getId();
             $_SESSION['nickname'] = $user->getNickname();
-            return $this->redirect(ROOT . '/index/index');
+            return $this->redirect('/index/index');
         }
-        return $this->redirect(ROOT . '/login/index?flash=Please adjust the wrong input fields&title=Registration failed');
+        return $this->redirect('/login/index' .generateFlash('Registration failed. Please adjust the wrong input fields.', 'error'));
     }
 
 }

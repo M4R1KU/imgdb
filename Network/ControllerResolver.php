@@ -31,7 +31,7 @@ class ControllerResolver {
 	 */
 	public function getController(Request $request, Response $response) {
 		if (isset($request->params['controller'])) {
-			$cont = $this->loadController($request->params['controller']);
+			$cont = "MKWeb\\ImgDB\\Controller\\" . ucfirst($request->params['controller']) . 'Controller';
 		} else {
 			$cont = $this->loadController($this->defaultcontroller);
 		}
@@ -51,20 +51,19 @@ class ControllerResolver {
 	protected function loadController($controller) {
 
 		if (!empty($controller)) {
-			$class = "MKWeb\\ImgDB\\Controller\\" . ucfirst($controller) . 'Controller';
+			$class = "MKWeb\\ImgDB\\Controller\\" . ucfirst($controller) . "Controller";
 			$file = $this->path . ucfirst($controller) . 'Controller.php';
-			if (!file_exists($file)) {
+			/*if (!file_exists($file)) {
 				if (empty($this->defaultcontroller)) {
 					return null;
 				}
 				$file = "{$this->path}{$this->defaultcontroller}Controller.php";
 			}
-			include_once($file);
-			if (!class_exists($class)) {
-				include_once("ControllerResolver.php");
+			include_once($file);*/
+			if (!class_exists($class, true)) {
 				$this->request->params['action'] = 'Index';
 				$this->request->params['passed']['error'] = '404';
-				return 'ErrorController';
+				return "MKWeb\\ImgDB\\Controller\\ErrorController";
 			}
 			return $class;
 

@@ -14,7 +14,8 @@
  * @param mixed $text array or string
  * @return array|string
  */
-function h($text) {
+function h($text)
+{
 
     if (is_string($text)) {
     } elseif (is_array($text)) {
@@ -28,12 +29,13 @@ function h($text) {
 
 }
 
-function linkHelper($link, $name, array $options = null) {
+function linkHelper($link, $name, array $options = null)
+{
     $href = $classes = '';
     if (is_array($link)) {
-        $href = ROOT . DS . $link['controller'] . DS . $link['action'];
+        $href = DS . $link['controller'] . DS . $link['action'];
     } else if (is_string($link)) {
-        $href = strpos($link, ROOT) === false ? ROOT . $link : $link;
+        $href = strpos($link, DS) === false ? DS . $link : $link;
     }
     if (!is_null($options)) {
         if (array_key_exists('class', $options)) {
@@ -44,10 +46,11 @@ function linkHelper($link, $name, array $options = null) {
             }
         }
     }
-    return '<a href="' . $href . '"' . (strlen($classes) > 0 ? 'class="' . $classes . '"':'') . ' >' . $name . '</a>';
+    return '<a href="' . $href . '"' . (strlen($classes) > 0 ? 'class="' . $classes . '"' : '') . ' >' . $name . '</a>';
 }
 
-function resizeAndMoveImage($galleryDir, $galleryThumbnailDir, $newFilename) {
+function resizeAndMoveImage($galleryDir, $galleryThumbnailDir, $newFilename)
+{
     list($width, $height) = getimagesize($galleryDir . $newFilename);
     $newHeight = THUMBNAIL_HEIGHT;
     $newWidth = $width / ($height / THUMBNAIL_HEIGHT);
@@ -60,10 +63,42 @@ function resizeAndMoveImage($galleryDir, $galleryThumbnailDir, $newFilename) {
     imagejpeg($thumb, $galleryThumbnailDir . $newFilename);
 }
 
-function getGalleryHash(\MKWeb\ImgDB\Model\Gallery $gallery) {
-
+function getGalleryHash(\MKWeb\ImgDB\Model\Gallery $gallery)
+{
+    return sha1($gallery->getName() . $gallery->getId());
 }
 
-function getImageHas(\MKWeb\ImgDB\Model\Image $imasge) {
+function getImageHash($fileNameWithType)
+{
+    return hash('sha256', $fileNameWithType . time()) . '.' . end(explode('.', $fileNameWithType));
+}
 
+
+function generateFlash($message, $type = 'warning')
+{
+    $time = time();
+
+    return '?flash=' . urlencode($message) . '&flashHash=' . hash('sha256', $message . SECRET . $time . $type) . "&flashTime=$time&flashType=$type";
+}
+
+/**
+ * @return bool
+ */
+function validateFlash()
+{
+    if (!isset($_GET['flash']) || !isset($_GET['flashHash']) || !isset($_GET['flashTime']) || !isset($_GET['flashType'])) {
+        return false;
+    }
+
+    $message = $_GET['flash'];
+    $hash = $_GET['flashHash'];
+    $time = $_GET['flashTime'];
+    $type = $_GET['flashType'];
+
+    $currentTime = time();
+    if (!($currentTime - 1 <= $time && $time <= $currentTime + 1)) {
+        return false;
+    }
+
+    return hash('sha256', $message . SECRET . $time . $type) === $hash;
 }

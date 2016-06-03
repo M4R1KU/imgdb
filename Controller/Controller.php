@@ -86,11 +86,11 @@ use MKWeb\ImgDB\View\View;
              */
             if (!isset($this->request->session['user_id'])) {
                 if (!in_array($this->request->uri, $this->notLoggedInSites)) {
-                    header('Location: ' . ROOT . '/login/index');
+                    header('Location: /login/index');
                 }
             } else {
                 if (in_array($this->request->uri, $this->loggedInDeniedSites)) {
-                    header('Location: ' . ROOT . '/index/index');
+                    header('Location: /index/index');
                 }
             }
         }
@@ -104,7 +104,7 @@ use MKWeb\ImgDB\View\View;
             $cont = ucfirst($this->request->params['controller']);
             $action = $template;
 
-            $path = "View/template/{$cont}/{$action}.php";
+            $path = "../View/template/{$cont}/{$action}.php";
             if (!file_exists($path)) {
                 return false;
             }
@@ -117,7 +117,7 @@ use MKWeb\ImgDB\View\View;
          */
         public function invokeAction() {
             if (isset($this->request->params['action'])) {
-                if (!is_callable([$this, $this->request->params['action']])) return $this->redirect(ROOT . '/Error/Index?error=404');
+                if (!is_callable([$this, $this->request->params['action']])) return $this->redirect('/Error/index?error=404');
                 return call_user_func([$this, $this->request->params['action']]);
             }
             return false;

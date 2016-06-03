@@ -1,15 +1,23 @@
+<?php include '../View/layout/flash.php' ?>
 <?php /** @var MKWeb\ImgDB\Model\Gallery gallery */ ?>
-<h1><?= $this->gallery->getName(); ?> <small>by <?= $this->gallery->getUser()->getNickname() ?></small></h1>
+<h1><?= $this->gallery->getName(); ?>
+    <small>by <?= $this->gallery->getUser()->getNickname() ?></small>
+</h1>
 <p><?= $this->gallery->getDescription(); ?></p>
-<div class="row">
-    <?php /**
+<div class="row gallery">
+    <?php
+    /**
      * @var MKWeb\ImgDB\Model\Image $image
      */
-    foreach($this->images as $image): ?>
-        <img src="<?= REL_THUMBNAIL_GALLERY_DIR . sha1($this->gallery->getName() . $this->gallery->getId()) . '/' . $image->getFilePath() ?>">
+    foreach ($this->images as $image): ?>
+        <div class="col l3 m6 s12 image-wrapper valign-wrapper">
+            <a href="/image/show?id=<?= $image->getId() ?>">
+                <img class="responsive-img valign hoverable" src="<?= REL_THUMBNAIL_GALLERY_DIR . getGalleryHash($this->gallery) . '/' . $image->getFilePath() ?>">
+            </a>
+        </div>
     <?php endforeach; ?>
 </div>
-<div class="fixed-action-btn" style="bottom: 45px; right: 45px;">        
+<div class="fixed-action-btn" style="bottom: 45px; right: 45px;">
     <a href="#add-image-modal" class="btn-floating btn-large waves-effect waves-light red add-image-modal-trigger">
         <i class="large material-icons">add</i>
     </a>
@@ -20,8 +28,8 @@
     <div class="modal-content">
         <div class="row">
             <div class="col m6 offset-m3 s12">
-                <h4>Add a new gallery.</h4>
-                <form action="<?= ROOT ?>/image/add" method="post" enctype="multipart/form-data">
+                <h4>Add a new Image to the gallery.</h4>
+                <form action="/image/add" method="post" enctype="multipart/form-data">
                     <div class="file-field input-field">
                         <div class="btn">
                             <span>File</span>

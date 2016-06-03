@@ -137,15 +137,17 @@ class Request
     protected function _setParams() {
 
 
-		$uriparts = trim(str_replace($this->base . '/', '', $_SERVER['REQUEST_URI']));
+		$uriparts = trim(str_replace(($this->base . '/'), '', $_SERVER['REQUEST_URI']));
 
         if (strpos($uriparts, '?')) {
             $uriparts = substr_replace($uriparts, '', strpos($uriparts, '?'));
         }
+        if ($uriparts[0] === '/') {
+            $uriparts = substr($uriparts, 1);
+        }
 		if ($uriparts !== '') {
 			$uriparts = explode('/', $uriparts);
 		}
-
 		if (isset($uriparts[0]) && $uriparts[0] !== '') {
 			$this->params['controller'] = $uriparts[0];
 		}
@@ -162,28 +164,6 @@ class Request
 		$this->params['passed'] = array_merge($_GET, $_POST, $_FILES);
 
     }
-
-    public function referer()
-    {
-        $ref = $_SERVER['HTTP_REFERER'];
-
-        $local = strpos($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST']) > 0;
-
-        $base = (empty($_SERVER['HTTPS']) ? 'http://' : 'https://') . $_SERVER['HTTP_HOST'];
-        if (!empty($ref) && !empty($base)) {
-            if ($local && strpos($ref, $base) === 0) {
-                $ref = substr($ref, strlen($base));
-                if ($ref[0] !== '/') {
-                    $ref = '/' . $ref;
-                }
-                return $ref;
-            } elseif (!$local) {
-                return $ref;
-            }
-        }
-        return '/';
-    }
-
 }
 
 ?>

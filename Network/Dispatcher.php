@@ -27,7 +27,8 @@ class Dispatcher {
 
 		$cr = new ControllerResolver('Index');
 		$controller = $cr->getController($request, $response);
-		if (!$controller) header('Location: ' . ROOT . '/Error/Index?error=403');
+		if (!$controller) header('Location: /Error/Index?error=403');
+		/** @var Controller $controller */
 		$response = $this->_invoke($controller);
 		print $response->body();
 	}

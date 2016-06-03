@@ -1,19 +1,11 @@
-<?php /*if ($this->flash): */ ?><!--
-    <div class="alert alert-danger alert-dismissible" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                aria-hidden="true">&times;</span></button>
-        <h4><? /*= $this->title */ ?></h4><br>
-        <p><? /*= $this->flash */ ?><p>
-    </div>
---><?php /*endif; */ ?>
-
+<?php include '../View/layout/flash.php' ?>
 <div class="row">
     <h2>Login or Register</h2>
     <div class="col m6 s12">
         <div class="card col m11 s10 offset-s1 z-depth-1-half">
             <div class="card-content">
                 <h3>Login<i class="material-icons right cursor-pointer" onclick="Materialize.toast('Fill the input fields to login!', 4000)">info_outline</i></h3>
-                <form action="<?= ROOT ?>/login/login" method="post">
+                <form action="/login/login" method="post">
                     <div class="row">
                         <div class="input-field col s12">
                             <label for="login_email">E-Mail</label>
@@ -41,7 +33,7 @@
                 <h3>Register<i class="material-icons right cursor-pointer"
                                onclick="Materialize.toast('Fill the input fields to register!', 500000)">info_outline</i>
                 </h3>
-                <form action="<?= ROOT ?>/login/add" method="post">
+                <form action="/login/add" method="post">
                     <div class="row">
                         <div class="input-field col s12"><label for="email">E-Mail</label>
                             <input type="email" class="tooltip-toggle" name="email" id="email"

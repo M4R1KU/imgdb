@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link type="text/css" rel="stylesheet" href="<?= WEBROOT ?>/css/materialize.min.css" media="screen,projection"/>
-    <link rel="stylesheet" href="<?= WEBROOT ?>/css/main.css">
-    <link rel="stylesheet" href="<?= WEBROOT ?>/css/animate.css">
+    <link type="text/css" rel="stylesheet" href="/css/materialize.min.css" media="screen,projection"/>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/animate.css">
 
 
 </head>
@@ -48,8 +48,8 @@
     ?>
     </div>
 </main>
-<script src="<?= WEBROOT ?>/js/jquery-2.1.4.min.js"></script>
-<script type="text/javascript" src="<?= WEBROOT ?>/js/materialize.js"></script>
-<script type="text/javascript" src="<?= WEBROOT ?>/js/main.js"></script>
+<script src="/js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="/js/materialize.js"></script>
+<script type="text/javascript" src="/js/main.js"></script>
 </body>
 </html>

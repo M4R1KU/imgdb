@@ -16,13 +16,52 @@ use MKWeb\ImgDB\Model\Tag;
 
 class ImageController extends Controller {
     
-    public function index() {
+    public function show() {
+        if (!isset($this->request->params['passed']['id'])) {
+            return $this->redirect('/Error/index?error=400');
+        }
+        $id = $this->request->params['passed']['id'];
+        $image = (new Image())->readById($id);
+        $gallery = $image->getGallery();
+        if ($gallery->getUser()->getId() != $this->request->session['user_id']) {
+            if ($gallery->isPrivate() === true) {
+                return $this->redirect('/Error/index?error=403');
+            }
+        }
+        $currentImage = $prevImage = $nextImage = null;
+        $images = (new Image())->getImagesByGallery($gallery);
+        for ($i = 0; $i < count($images); $i++) {
+            if ($images[$i] instanceof Image && $images[$i]->getId() == $id) {
+                $currentImage = $images[$i];
+                $nextImage = isset($images[$i+1]) ? $images[$i+1] : null;
+                $prevImage = isset($images[$i-1]) ? $images[$i-1] : null;
+                break;
+            }
+        }
+        if ($currentImage === null) {
+            return $this->redirect('/Error/index?error=404');
+        }
         
+        $imgTags = (new ImageTag())->readByImage($image);
+        $tags = [];
+        if (count($imgTags) > 0) {
+            /** @var ImageTag $imgTag */
+            foreach ($imgTags as $imgTag) {
+                $tags[] = $imgTag->getTag();
+            }
+        }
+        $this->view->assign('tags', $tags);
+        $this->view->assign('gallery', $gallery);
+        $this->view->assign('currentImage', $currentImage);
+        $this->view->assign('nextImage', $nextImage);
+        $this->view->assign('prevImage', $prevImage);
+
     }
     
     public function add() {
-        if (!isset($this->request->params['passed']['image_add_file'])) {
-            return $this->redirect(ROOT . isset($this->request->params['passed']['image_add_gallery_id']) ? '/gallery/index?id=' . $this->request->params['passed']['image_add_gallery_id'] . '&title=Shit1' : '/index/index' . '&title=Shit1');
+        if (empty($this->request->params['passed']['image_add_file']) || empty($this->request->params['passed']['image_add_filename'])) {
+            $flash = generateFlash('File to upload is missing', 'error');
+            return $this->redirect(isset($this->request->params['passed']['image_add_gallery_id']) ? '/gallery/index' . $flash . '&id=' . $this->request->params['passed']['image_add_gallery_id'] : '/index/index' . $flash);
         }
         $allowed_types = ['image/jpg', 'image/jpeg', 'image/png'];
 
@@ -31,19 +70,18 @@ class ImageController extends Controller {
         $filename = $this->request->params['passed']['image_add_filename'];
         $tagsRequest = explode(',', $this->request->params['passed']['image_add_tags']);
 
+        if (!in_array($file['type'], $allowed_types)) return $this->redirect('/gallery/index' .generateFlash('File-type not allowed', 'warning') . '&id=' . $id);
+
         $gallery = (new Gallery())->readById($id);
-        $dirName = sha1($gallery->getName() . $gallery->getId()) . '/';
+        $dirName = getGalleryHash($gallery) . '/';
         $galleryDir = ABS_FINAL_GALLERY_DIR . $dirName;
         $galleryThumbnailDir = ABS_THUMBNAIL_GALLERY_DIR . $dirName;
 
-        if (!in_array($file['type'], $allowed_types)) return $this->redirect(ROOT . '/gallery/index?id=' . $id . '&title=Shit2');
-
-        $newFilename = hash('sha256', $filename . time()) . '.' . end(explode('.', $file['name']));
-
+        $newFilename = getImageHash($filename);
         $file_path = $galleryDir . $newFilename;
 
         if (move_uploaded_file($file['tmp_name'], $file_path) === false) {
-            return $this->redirect(ROOT . '/gallery/index?id=' . $id);
+            return $this->redirect('/gallery/index?id=' . $id);
         }
 
         resizeAndMoveImage($galleryDir, $galleryThumbnailDir, $newFilename);
@@ -60,7 +98,7 @@ class ImageController extends Controller {
                 (new ImageTag(null, $image, $t))->create();
             }
         }
-        return $this->redirect(ROOT . '/gallery/index?id=' . $id);
+        return $this->redirect('/gallery/index?id=' . $id);
     }
 
 }
