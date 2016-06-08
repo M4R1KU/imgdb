@@ -1,8 +1,9 @@
 <?php
 namespace MKWeb\ImgDB\Controller;
 
-use MKWeb\ImgDB\Model\Gallery;
-use MKWeb\ImgDB\Model\User;
+use MKWeb\ImgDB\Model\Entity\User;
+use MKWeb\ImgDB\Model\GalleryTable;
+use MKWeb\ImgDB\Model\UserTable;
 
 class IndexController extends Controller {
 
@@ -10,10 +11,13 @@ class IndexController extends Controller {
     public function index() {
 
         if (!empty($this->request->session['user_id'])) {
+            $galleryTable = new GalleryTable();
+            $userTable = new UserTable();
+            
             $this->template = $this->_setTemplate('inside');
-            $user = (new User())->readById($this->request->session['user_id']);
-            $private = (new Gallery())->getGalleriesByUser($user);
-            $public = (new Gallery())->getPublicGalleries();
+            $user = $userTable->readById($this->request->session['user_id']);
+            $private = $galleryTable->getGalleriesByUser($user);
+            $public = $galleryTable->getPublicGalleries();
             $private = prepareGalleries($private);
             $public = prepareGalleries($public);
             

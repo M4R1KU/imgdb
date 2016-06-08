@@ -9,8 +9,10 @@
 namespace MKWeb\ImgDB\Controller;
 
 
-use MKWeb\ImgDB\Model\Gallery;
-use MKWeb\ImgDB\Model\Image;
+use MKWeb\ImgDB\Model\Entity\Gallery;
+use MKWeb\ImgDB\Model\GalleryTable;
+use MKWeb\ImgDB\Model\ImageTable;
+use MKWeb\ImgDB\Model\UserTable;
 
 class GalleryController extends Controller
 {
@@ -19,11 +21,14 @@ class GalleryController extends Controller
         if (!isset($this->request->params['passed']['id'])) {
             return $this->redirect('/Error/index?error=400&msg=Gallery id is missing.');
         }
+        $galleryTable = new GalleryTable();
+        $imageTable = new ImageTable();
+
         $id = intval($this->request->params['passed']['id']);
-        $gallery = (new Gallery())->readById($id);
+        $gallery = $galleryTable->readById($id);
         if (!$gallery) return $this->redirect('/Error/index?error=404&msg=Can\'t find gallery.');
 
-        $images = (new Image())->getImagesByGallery($gallery);
+        $images = $imageTable->getImagesByGallery($gallery);
         $this->view->assign('images', $images);
         $this->view->assign('gallery', $gallery);
 
@@ -33,12 +38,14 @@ class GalleryController extends Controller
         if (!isset($this->request->params['passed']['id'])){
             return $this->redirect('/index/index' . generateFlash('Gallery id is missing. Can\'t delete gallery.', 'error'));
         }
+        $galleryTable = new GalleryTable();
+
         $id = intval($this->request->params['passed']['id']);        
-        $gallery = (new Gallery())->readById($id);
+        $gallery = $galleryTable->readById($id);
         if (intval($gallery->getUser()->getId()) !== intval($this->request->session['user_id'])) {
             return $this->redirect('/index/index'. generateFlash('You are not allowed to delete this gallery', 'warning'));
         }
-        if ($gallery->delete()) {
+        if ($galleryTable->delete($gallery)) {
             $dirName = getGalleryHash($gallery) . '/';
             $galleryDir = ABS_FINAL_GALLERY_DIR . $dirName;
             $galleryThumbnailDir = ABS_THUMBNAIL_GALLERY_DIR . $dirName;
@@ -62,15 +69,13 @@ class GalleryController extends Controller
             empty($this->request->params['passed']['gallery_add_description'])) {
             return $this->redirect('/index/index' . generateFlash('Some essential information is missing. Could not create a new gallery.', 'error'));
         }
+        $galleryTable = new GalleryTable();
+        $userTable = new UserTable();
+
         $name = h($this->request->params['passed']['gallery_add_name']);
         $description = nl2br(h($this->request->params['passed']['gallery_add_description']));
         $private = isset($this->request->params['passed']['gallery_add_private']) && $this->request->params['passed']['gallery_add_private'] === 'private';
-        $gallery = new Gallery();
-        $gallery->setUserById(intval($this->request->session['user_id']));
-        $gallery->setName($name);
-        $gallery->setDescription($description);
-        $gallery->setPrivate($private);
-        $gallery->create();
+        $gallery = $galleryTable->create(new Gallery(null, $name, $description, $userTable->readById(intval($this->request->session['user_id'])), $private));
 
         $dirName = getGalleryHash($gallery) . '/';
         $galleryDir = ABS_FINAL_GALLERY_DIR . $dirName;

@@ -8,7 +8,8 @@
 
 namespace MKWeb\ImgDB\Controller;
 
-use MKWeb\ImgDB\Model\User;
+use MKWeb\ImgDB\Model\Entity\User;
+use MKWeb\ImgDB\Model\UserTable;
 use MKWeb\ImgDB\Util\Validator;
 
 class LoginController extends Controller {
@@ -17,13 +18,15 @@ class LoginController extends Controller {
     }
 
     public function login() {
+        $userTable = new UserTable();
+        
         if (!Validator::validateEmail($this->request->params['passed']['login_email']) || empty($this->request->params['passed']['login_password'])) {
             return $this->redirect('/login/index' . generateFlash('Login failed. Some Information is missing or wrong.', 'error'));
         }
         $email = h($this->request->params['passed']['login_email']);
         $pw = h($this->request->params['passed']['login_password']);
-        $user = (new User())->constructUserByEmail($email);
-        if ($user && $user->checkLogin($pw)) {
+        $user = $userTable->constructUserByEmail($email);
+        if ($user && $userTable->checkLogin($pw, $user)) {
             $_SESSION['user_id'] = $user->getId();
             $_SESSION['nickname'] = $user->getNickname();
             return $this->redirect('/index/index');
@@ -38,16 +41,17 @@ class LoginController extends Controller {
     }
 
     public function add() {
-        $user = new User();
+        if (empty($this->request->params['passed']['username']) || empty($this->request->params['passed']['email']) || empty($this->request->params['passed']['password']) || empty($this->request->params['passed']['password_confirmed'])) {
+            return $this->redirect('/login/index' . generateFlash('Registration failed. Some information is missing or wrong.', 'error'));
+        }
+        $userTable = new UserTable();
+        
         $name = $this->request->params['passed']['username'];
         $email = $this->request->params['passed']['email'];
         $pw = $this->request->params['passed']['password'];
         $pwc = $this->request->params['passed']['password_confirmed'];
-        if (!empty($name) && Validator::validateEmail($email) && $user->isUniqueEmail($email) && !Validator::validatePW($pw) && Validator::confirmPW($pw, $pwc)) {
-            $user->setNickname($name);
-            $user->setEmail($email);
-            $user->setPassword($pw);
-            $user->create();
+        if (!empty($name) && Validator::validateEmail($email) && $userTable->isUniqueEmail($email) && !Validator::validatePW($pw) && Validator::confirmPW($pw, $pwc)) {
+            $user = $userTable->create(new User(null, $email, $name, $pw));
             $_SESSION['user_id'] = $user->getId();
             $_SESSION['nickname'] = $user->getNickname();
             return $this->redirect('/index/index');

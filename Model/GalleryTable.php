@@ -9,35 +9,18 @@
 namespace MKWeb\ImgDB\Model;
 
 
-class Gallery extends Model
+use MKWeb\ImgDB\Model\Entity\Gallery;
+use MKWeb\ImgDB\Model\Entity\User;
+
+class GalleryTable extends Model
 {
-
-    private $id;
-    private $name;
-    private $description;
-    /**
-     * @var User
-     */
-    private $user;
-    private $private;
-
     /**
      * Gallery constructor.
-     * @param $id
-     * @param $name
-     * @param $description
-     * @param User $user
-     * @param $private
      */
-    public function __construct($id = null, $user = null, $name = null, $description = null, $private = null)
-    {
-        parent::__construct(__CLASS__);
-        $this->id = $id;
-        $this->name = $name;
-        $this->description = $description;
-        $this->user = $user;
-        $this->private = $private;
+    public function __construct() {
+        parent::__construct(Gallery::class);
     }
+
 
     /**
      * if $gallery is already instance of Gallery it will return $com
@@ -51,7 +34,7 @@ class Gallery extends Model
             return $gallery;
         }
         else if (is_array($gallery)) {
-            return new static($gallery['gallery_id'],(new User)->readById($gallery['id_user']), $gallery['name'], $gallery['description'], $gallery['private']);
+            return new Gallery($gallery['gallery_id'], $gallery['name'], $gallery['description'], (new UserTable)->readById($gallery['id_user']), $gallery['private']);
         }
         else return null;
     }
@@ -60,18 +43,25 @@ class Gallery extends Model
      * inserts a new row into the table with the instancevariables
      * and sets the id for the current object
      *
-     * @return bool
+     * @param Gallery $gallery
+     * @return bool|Gallery
      */
-    public function create() {
+    public function create($gallery) {
         $query = $this->connection->prepare("INSERT INTO Gallery (id_user, name, description, private) VALUES (?, ?, ?, ?)");
-        $query->bind_param('issi', $this->user->getId(), $this->name, $this->description, $this->private);
+        $query->bind_param('issi', $gallery->getUser()->getId(), $gallery->getName(), $gallery->getDescription(), $gallery->isPrivate());
         if (!$query->execute()) return false;
-        $this->id = $this->connection->insert_id;
-        return true;
+        $gallery->setId($this->connection->insert_id);
+        return $gallery;
     }
 
-    public function setUserById($user_id) {
-        $this->user = (new User())->readById(intval($user_id));
+    /**
+     * @param Gallery $gallery
+     * @param $user_id
+     * @return Gallery
+     */
+    public function setUserById($gallery, $user_id) {
+        $gallery->setUser((new UserTable())->readById(intval($user_id)));
+        return $gallery;
     }
     
     public function getGalleriesByUser(User $user) {
@@ -105,9 +95,13 @@ class Gallery extends Model
         $query->bind_param('i', intval($id));
         return $this->exec($query);
     }
-    
-    public function delete() {
-        return $this->deleteById($this->id);
+
+    /**
+     * @param Gallery $gallery
+     * @return bool
+     */
+    public function delete($gallery) {
+        return $this->deleteById($gallery->getId());
     }
 
     /**
@@ -134,94 +128,7 @@ class Gallery extends Model
      */
     public function readById($id)
     {
-        $result = $this->constructGallery(parent::readById($id));
-        //error_log(var_export($result));
-        return $result;
+        return $this->constructGallery(parent::readById($id));
     }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param int $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param string $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * @param string $description
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-    }
-
-    /**
-     * @return User
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * @param User $user
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function isPrivate()
-    {
-        return $this->private;
-    }
-
-    /**
-     * @param boolean $private
-     */
-    public function setPrivate($private)
-    {
-        $this->private = $private;
-    }
-
-
     
-    
-
-
 }

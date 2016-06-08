@@ -9,34 +9,17 @@
 namespace MKWeb\ImgDB\Model;
 
 
-class Image extends Model {
+use MKWeb\ImgDB\Model\Entity\Gallery;
+use MKWeb\ImgDB\Model\Entity\Image;
 
-
-    private $id;
-    private $title;
-    private $description;
+class ImageTable extends Model {
     /**
-     * @var Gallery
+     * ImageTable constructor.
      */
-    private $gallery;
-    private $file_path;
-
-    /**
-     * Image constructor.
-     * @param $id
-     * @param null $gallery
-     * @param null $title
-     * @param $description
-     * @param null $file_path
-     */
-    public function __construct($id = null, $gallery = null, $title = null, $description = null, $file_path = null) {
-        parent::__construct(__CLASS__);
-        $this->id = $id;
-        $this->title = $title;
-        $this->description = $description;
-        $this->gallery = $gallery;
-        $this->file_path = $file_path;
+    public function __construct() {
+        parent::__construct(Image::class);
     }
+
 
     /**
      * if $image is already instance of Image it will return $com
@@ -50,7 +33,7 @@ class Image extends Model {
             return $image;
         }
         else if (is_array($image)) {
-            return new static($image['image_id'],(new Gallery)->readById($image['id_gallery']), $image['title'], $image['description'], $image['file_path']);
+            return new Image($image['image_id'], $image['title'], $image['description'], (new GalleryTable)->readById($image['id_gallery']), $image['file_path']);
         }
         else return null;
     }
@@ -59,18 +42,25 @@ class Image extends Model {
      * inserts a new row into the table with the instancevariables
      * and sets the id for the current object
      *
-     * @return bool
+     * @param Image $image
+     * @return bool|Image
      */
-    public function create() {
+    public function create($image) {
         $query = $this->connection->prepare("INSERT INTO Image (id_gallery, title, description, file_path) VALUES (?, ?, ?, ?)");
-        $query->bind_param('isss', $this->gallery->getId(), $this->title, $this->description, $this->file_path);
+        $query->bind_param('isss', $image->getGallery()->getId(), $image->getTitle(), $image->getDescription(), $image->getFilePath());
         if (!$query->execute()) return false;
-        $this->id = $this->connection->insert_id;
-        return true;
+        $image->setId($this->connection->insert_id);
+        return $image;
     }
 
-    public function setGalleryById($gallery_id) {
-        $this->gallery = (new User())->readById(intval($gallery_id));
+    /**
+     * @param Image $image
+     * @param $gallery_id
+     * @return mixed
+     */
+    public function setGalleryById($image, $gallery_id) {
+        $image->setGallery((new GalleryTable())->readById(intval($gallery_id)));
+        return $image;
     }
 
     /**
@@ -97,8 +87,12 @@ class Image extends Model {
         return $this->exec($query);
     }
 
-    public function delete() {
-        return $this->deleteById($this->id);
+    /**
+     * @param Image $image
+     * @return bool
+     */
+    public function delete($image) {
+        return $this->deleteById($image->getId());
     }
 
     /**
@@ -116,6 +110,13 @@ class Image extends Model {
 
     }
 
+    /**
+     * 
+     * TODO
+     * @param $name
+     * @param $user_id
+     * @return bool
+     */
     public function userCanSeePicture($name, $user_id) {
         $query = $this->connection->prepare("SELECT * FROM Image AS i JOIN Gallery AS g ON i.id_gallery = g.gallery_id JOIN User AS u ON g.id_user = u.user_id WHERE g.private = 0 OR i.file_path = ? AND u.user_id = ?");
         $query->bind_param('si', $name, intval($user_id));
@@ -135,91 +136,4 @@ class Image extends Model {
     {
         return $this->constructImage(parent::readById($id));
     }
-
-    /**
-     * @return null
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param null $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * @return null
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * @param null $title
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-    }
-
-    /**
-     * @return null
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * @param null $description
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-    }
-
-    /**
-     * @return Gallery
-     */
-    public function getGallery()
-    {
-        return $this->gallery;
-    }
-
-    /**
-     * @param Gallery $gallery
-     */
-    public function setGallery($gallery)
-    {
-        $this->gallery = $gallery;
-    }
-
-    /**
-     * @return null
-     */
-    public function getFilePath()
-    {
-        return $this->file_path;
-    }
-
-    /**
-     * @param null $file_path
-     */
-    public function setFilePath($file_path)
-    {
-        $this->file_path = $file_path;
-    }
-
-    function __toString()
-    {
-        return $this->id ."";
-    }
-
-
 }

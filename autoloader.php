@@ -20,12 +20,19 @@ const classes = [
     "MKWeb\\ImgDB\\Controller\\AjaxController" => __DIR__ . "/Controller/AjaxController.php",
 
     "MKWeb\\ImgDB\\Model\\Model" => __DIR__ . "/Model/Model.php",
-    "MKWeb\\ImgDB\\Model\\User" => __DIR__ . "/Model/User.php",
-    "MKWeb\\ImgDB\\Model\\Gallery" => __DIR__ . "/Model/Gallery.php",
-    "MKWeb\\ImgDB\\Model\\Image" => __DIR__ . "/Model/Image.php",
-    "MKWeb\\ImgDB\\Model\\Tag" => __DIR__ . "/Model/Tag.php",
-    "MKWeb\\ImgDB\\Model\\ImageTag" => __DIR__ . "/Model/ImageTag.php",
+    "MKWeb\\ImgDB\\Model\\UserTable" => __DIR__ . "/Model/UserTable.php",
+    "MKWeb\\ImgDB\\Model\\GalleryTable" => __DIR__ . "/Model/GalleryTable.php",
+    "MKWeb\\ImgDB\\Model\\ImageTable" => __DIR__ . "/Model/ImageTable.php",
+    "MKWeb\\ImgDB\\Model\\TagTable" => __DIR__ . "/Model/TagTable.php",
+    "MKWeb\\ImgDB\\Model\\ImageTagTable" => __DIR__ . "/Model/ImageTagTable.php",
     "MKWeb\\ImgDB\\Model\\Ajax" => __DIR__ . "/Model/Ajax.php",
+
+    "MKWeb\\ImgDB\\Model\\Entity\\Entity" => __DIR__ . "/Model/Entities/Entity.php",
+    "MKWeb\\ImgDB\\Model\\Entity\\User" => __DIR__ . "/Model/Entities/User.php",
+    "MKWeb\\ImgDB\\Model\\Entity\\Gallery" => __DIR__ . "/Model/Entities/Gallery.php",
+    "MKWeb\\ImgDB\\Model\\Entity\\Image" => __DIR__ . "/Model/Entities/Image.php",
+    "MKWeb\\ImgDB\\Model\\Entity\\Tag" => __DIR__ . "/Model/Entities/Tag.php",
+    "MKWeb\\ImgDB\\Model\\Entity\\ImageTag" => __DIR__ . "/Model/Entities/ImageTag.php",
     
     
     "MKWeb\\ImgDB\\View\\View" => __DIR__ . "/View/View.php",

@@ -8,32 +8,19 @@
 
 namespace MKWeb\ImgDB\Model;
 
+use MKWeb\ImgDB\Model\Entity\Image;
+use MKWeb\ImgDB\Model\Entity\ImageTag;
+use MKWeb\ImgDB\Model\Entity\Tag;
 
-class ImageTag extends Model {
 
-    private $id;
+class ImageTagTable extends Model {
     /**
-     * @var Image
+     * ImageTagTable constructor.
      */
-    private $image;
-    /**
-     * @var Tag
-     */
-    private $tag;
-
-    /**
-     * ImageTag constructor.
-     * @param null $id
-     * @param null $image
-     * @param null $tag
-     */
-    public function __construct($id = null, $image = null, $tag = null)
-    {
-        parent::__construct(__CLASS__);
-        $this->id = $id;
-        $this->image = $image;
-        $this->tag = $tag;
+    public function __construct() {
+        parent::__construct(ImageTag::class);
     }
+
 
     /**
      * if $tag is already instance of ImageTag it will return $imageTag
@@ -46,7 +33,7 @@ class ImageTag extends Model {
             return $imageTag;
         }
         else if (is_array($imageTag)) {
-            return new static($imageTag['image_tag_id'], (new Image)->readById($imageTag['id_image']), (new Tag)->readById($imageTag['id_tag']));
+            return new ImageTag($imageTag['image_tag_id'], (new ImageTable)->readById($imageTag['id_image']), (new TagTable)->readById($imageTag['id_tag']));
         }
         else return null;
     }
@@ -55,14 +42,15 @@ class ImageTag extends Model {
      * inserts a new row into the table with the instancevariables
      * and sets the id for the current object
      *
-     * @return bool
+     * @param ImageTag $imageTag
+     * @return bool|ImageTag
      */
-    public function create() {
+    public function create($imageTag) {
         $query = $this->connection->prepare("INSERT INTO Image_Tag (id_image, id_tag) VALUES (?, ?)");
-        $query->bind_param('ii',$this->image->getId(), $this->tag->getId());
+        $query->bind_param('ii',$imageTag->getImage()->getId(), $imageTag->getTag()->getId());
         if (!$query->execute()) return false;
-        $this->id = $this->connection->insert_id;
-        return true;
+        $imageTag->setId($this->connection->insert_id);
+        return $imageTag;
     }
 
     public function deleteById($id) {
@@ -71,8 +59,12 @@ class ImageTag extends Model {
         return $this->exec($query);
     }
 
-    public function delete() {
-        return $this->deleteById($this->id);
+    /**
+     * @param ImageTag $imageTag
+     * @return bool
+     */
+    public function delete($imageTag) {
+        return $this->deleteById($imageTag->getId());
     }
     
     public function readByImage(Image $img) {
@@ -122,56 +114,6 @@ class ImageTag extends Model {
     public function readById($id)
     {
         return $this->constructImageTag(parent::readById($id));
-    }
-
-    /**
-     * @return null
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param null $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * @return Image
-     */
-    public function getImage()
-    {
-        return $this->image;
-    }
-
-    /**
-     * @param Image $image
-     */
-    public function setImage($image)
-    {
-        $this->image = $image;
-    }
-
-    /**
-     * @return Tag
-     */
-    public function getTag()
-    {
-        return $this->tag;
-    }
-
-    /**
-     * @param Tag $tag
-     */
-    public function setTag($tag)
-    {
-        $this->tag = $tag;
-    }
-    
-    
+    }   
 
 }

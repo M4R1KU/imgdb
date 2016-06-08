@@ -15,7 +15,7 @@ class Model {
      */
 	public function __construct($currentTable = null)
 	{
-        $this->currentTable = ucfirst(str_replace(__NAMESPACE__ . '\\', '', $currentTable));
+        $this->currentTable = ucfirst(str_replace(__NAMESPACE__ . '\\Entity\\', '', $currentTable));
 		$this->connection = DBConnector::getInstance();
 	}
 

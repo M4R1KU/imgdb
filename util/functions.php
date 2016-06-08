@@ -63,7 +63,7 @@ function resizeAndMoveImage($galleryDir, $galleryThumbnailDir, $newFilename)
     imagejpeg($thumb, $galleryThumbnailDir . $newFilename);
 }
 
-function getGalleryHash(\MKWeb\ImgDB\Model\Gallery $gallery)
+function getGalleryHash(\MKWeb\ImgDB\Model\Entity\Gallery $gallery)
 {
     return sha1($gallery->getName() . $gallery->getId());
 }

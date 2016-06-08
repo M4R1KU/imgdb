@@ -9,10 +9,13 @@
 namespace MKWeb\ImgDB\Controller;
 
 
-use MKWeb\ImgDB\Model\Gallery;
-use MKWeb\ImgDB\Model\Image;
-use MKWeb\ImgDB\Model\ImageTag;
-use MKWeb\ImgDB\Model\Tag;
+use MKWeb\ImgDB\Model\Entity\Image;
+use MKWeb\ImgDB\Model\Entity\ImageTag;
+use MKWeb\ImgDB\Model\Entity\Tag;
+use MKWeb\ImgDB\Model\GalleryTable;
+use MKWeb\ImgDB\Model\ImageTable;
+use MKWeb\ImgDB\Model\ImageTagTable;
+use MKWeb\ImgDB\Model\TagTable;
 
 class ImageController extends Controller {
     
@@ -20,8 +23,11 @@ class ImageController extends Controller {
         if (!isset($this->request->params['passed']['id'])) {
             return $this->redirect('/Error/index?error=400');
         }
+        $imageTable = new ImageTable();
+        $imageTagTable = new ImageTagTable();
+        
         $id = $this->request->params['passed']['id'];
-        $image = (new Image())->readById($id);
+        $image = $imageTable->readById($id);
         $gallery = $image->getGallery();
         if ($gallery->getUser()->getId() != $this->request->session['user_id']) {
             if ($gallery->isPrivate() === true) {
@@ -29,7 +35,7 @@ class ImageController extends Controller {
             }
         }
         $currentImage = $prevImage = $nextImage = null;
-        $images = (new Image())->getImagesByGallery($gallery);
+        $images = $imageTable->getImagesByGallery($gallery);
         for ($i = 0; $i < count($images); $i++) {
             if ($images[$i] instanceof Image && $images[$i]->getId() == $id) {
                 $currentImage = $images[$i];
@@ -42,7 +48,7 @@ class ImageController extends Controller {
             return $this->redirect('/Error/index?error=404&msg=Image not found :/');
         }
         
-        $imgTags = (new ImageTag())->readByImage($image);
+        $imgTags = $imageTagTable->readByImage($image);
         $tags = [];
         if (count($imgTags) > 0) {
             /** @var ImageTag $imgTag */
@@ -62,6 +68,10 @@ class ImageController extends Controller {
             $flash = generateFlash('File to upload is missing', 'error');
             return $this->redirect(isset($this->request->params['passed']['image_add_gallery_id']) ? '/gallery/index' . $flash . '&id=' . $this->request->params['passed']['image_add_gallery_id'] : '/index/index' . $flash);
         }
+        $galleryTable = new GalleryTable();
+        $imageTable = new ImageTable();
+        $tagTable = new TagTable();
+        $imageTagTable = new ImageTagTable();
         $allowed_types = ['image/jpg', 'image/jpeg', 'image/png'];
 
         $id = intval($this->request->params['passed']['image_add_gallery_id']);
@@ -71,7 +81,7 @@ class ImageController extends Controller {
 
         if (!in_array($file['type'], $allowed_types)) return $this->redirect('/gallery/index' .generateFlash('File-type not allowed', 'warning') . '&id=' . $id);
 
-        $gallery = (new Gallery())->readById($id);
+        $gallery = $galleryTable->readById($id);
 
         if ($this->request->session['user_id'] != $gallery->getUser()->getId()) {
             return $this->redirect('/gallery/index'. generateFlash('You are not allowed to add images in this gallery.', 'warning') . '&id=' . $id);
@@ -89,17 +99,15 @@ class ImageController extends Controller {
         }
 
         resizeAndMoveImage($galleryDir, $galleryThumbnailDir, $newFilename);
-
-        $image = new Image(null, $gallery, null, null, $newFilename);
-        $image->create();
+        
+        $image = $imageTable->create(new Image(null, null, null, $gallery, $newFilename));
 
         if (count($tagsRequest) > 0) {
             foreach ($tagsRequest as $tag) {
-                $t = new Tag();
-                if (!$t->exists($tag)) {
-                    $t->create();
+                if (!$newTag = $tagTable->exists($tag)) {
+                    $newTag = $tagTable->create(new Tag(null, $tag));
                 }
-                (new ImageTag(null, $image, $t))->create();
+                $imageTagTable->create(new ImageTag(null, $image, $newTag));
             }
         }
         return $this->redirect('/gallery/index?id=' . $id);
@@ -108,12 +116,14 @@ class ImageController extends Controller {
     // TODO
     public function index() {
         if (empty($this->request->params['passed']['name']) || empty($this->request->params['passed']['gid'])) return $this->redirect('/error/index?error=400');
+        $galleryTable = new GalleryTable();
+        $imageTable = new ImageTable();
 
         $name = $this->request->params['passed']['name'];
-        $gallery = (new Gallery())->readById($this->request->params['passed']['gid']);
+        $gallery = $galleryTable->readById($this->request->params['passed']['gid']);
         $filename = ABS_FINAL_GALLERY_DIR . getGalleryHash($gallery) . '/' . $name;
         if (file_exists($filename)) {
-            if ((new Image())->userCanSeePicture($name, $this->request->session['user_id'])) {
+            if ($imageTable->userCanSeePicture($name, $this->request->session['user_id'])) {
                 $finfo = finfo_open(FILEINFO_MIME_TYPE);
                 $this->response->header('Content-Type', finfo_file($finfo, $filename));
                 $this->response->header('Content-Length', filesize($filename));

@@ -2,7 +2,7 @@
 <h1>Hello <?= $this->request->session['nickname'] ?></h1>
 <div class="personal-galleries row">
     <h4>Your personal galleries:</h4>
-    <?php /** @var \MKWeb\ImgDB\Model\Gallery $gallery */
+    <?php /** @var \MKWeb\ImgDB\Model\Entity\Gallery $gallery */
     if ($this->user_galleries):
         foreach ($this->user_galleries as $row): ?>
             <div class="row">
@@ -32,7 +32,7 @@
 </div>
 <div class="public-galleries row">
     <h4>Some public galleries:</h4>
-    <?php /** @var \MKWeb\ImgDB\Model\Gallery $gallery */
+    <?php /** @var \MKWeb\ImgDB\Model\Entity\Gallery $gallery */
     if ($this->public_galleries):
         foreach ($this->public_galleries as $row): ?>
             <div class="row">
