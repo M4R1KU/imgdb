@@ -25,7 +25,7 @@ class ImageController extends Controller {
         $gallery = $image->getGallery();
         if ($gallery->getUser()->getId() != $this->request->session['user_id']) {
             if ($gallery->isPrivate() === true) {
-                return $this->redirect('/Error/index?error=403');
+                return $this->redirect('/Error/index?error=403&msg=You are not allowed to see this picture.');
             }
         }
         $currentImage = $prevImage = $nextImage = null;
@@ -39,7 +39,7 @@ class ImageController extends Controller {
             }
         }
         if ($currentImage === null) {
-            return $this->redirect('/Error/index?error=404');
+            return $this->redirect('/Error/index?error=404&msg=Image not found :/');
         }
         
         $imgTags = (new ImageTag())->readByImage($image);
@@ -55,7 +55,6 @@ class ImageController extends Controller {
         $this->view->assign('currentImage', $currentImage);
         $this->view->assign('nextImage', $nextImage);
         $this->view->assign('prevImage', $prevImage);
-
     }
     
     public function add() {
@@ -73,6 +72,11 @@ class ImageController extends Controller {
         if (!in_array($file['type'], $allowed_types)) return $this->redirect('/gallery/index' .generateFlash('File-type not allowed', 'warning') . '&id=' . $id);
 
         $gallery = (new Gallery())->readById($id);
+
+        if ($this->request->session['user_id'] != $gallery->getUser()->getId()) {
+            return $this->redirect('/gallery/index'. generateFlash('You are not allowed to add images in this gallery.', 'warning') . '&id=' . $id);
+        }
+
         $dirName = getGalleryHash($gallery) . '/';
         $galleryDir = ABS_FINAL_GALLERY_DIR . $dirName;
         $galleryThumbnailDir = ABS_THUMBNAIL_GALLERY_DIR . $dirName;
@@ -99,6 +103,29 @@ class ImageController extends Controller {
             }
         }
         return $this->redirect('/gallery/index?id=' . $id);
+    }
+
+    // TODO
+    public function index() {
+        if (empty($this->request->params['passed']['name']) || empty($this->request->params['passed']['gid'])) return $this->redirect('/error/index?error=400');
+
+        $name = $this->request->params['passed']['name'];
+        $gallery = (new Gallery())->readById($this->request->params['passed']['gid']);
+        $filename = ABS_FINAL_GALLERY_DIR . getGalleryHash($gallery) . '/' . $name;
+        if (file_exists($filename)) {
+            if ((new Image())->userCanSeePicture($name, $this->request->session['user_id'])) {
+                $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                $this->response->header('Content-Type', finfo_file($finfo, $filename));
+                $this->response->header('Content-Length', filesize($filename));
+                finfo_close($finfo);
+                return $this->response->body(file_get_contents($filename));
+            }
+            else {
+                return $this->redirect('/error/index?error=403&msg=You are not allowed to see this image');
+            }
+
+        }
+        return $this->redirect('/error/index?error=404&The requested image was not found on the server');
     }
 
 }

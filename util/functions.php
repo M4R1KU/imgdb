@@ -102,3 +102,31 @@ function validateFlash()
 
     return hash('sha256', $message . SECRET . $time . $type) === $hash;
 }
+
+function prepareGalleries($out) {
+    $galleries = [];
+    if (count($out) >= 3) {
+        $j = 0;
+        for ($i = 0; $i < count($out); $i++) {
+            $galleries[$j][] = $out[$i];
+            if (($i+1) % 3 == 0) $j++;
+        }
+    } else if ($out) {
+        $galleries[0] = $out;
+    }
+    return $galleries;
+}
+
+function deleteDir($dir)
+{
+    $it = new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS);
+    $files = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::CHILD_FIRST);
+    foreach ($files as $file) {
+        if ($file->isDir()) {
+            rmdir($file->getRealPath());
+        } else {
+            unlink($file->getRealPath());
+        }
+    }
+    rmdir($dir);
+}

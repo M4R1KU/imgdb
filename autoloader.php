@@ -17,6 +17,7 @@ const classes = [
     "MKWeb\\ImgDB\\Controller\\GalleryController" => __DIR__ . "/Controller/GalleryController.php",
     "MKWeb\\ImgDB\\Controller\\ImageController" => __DIR__ . "/Controller/ImageController.php",
     "MKWeb\\ImgDB\\Controller\\ErrorController" => __DIR__ . "/Controller/ErrorController.php",
+    "MKWeb\\ImgDB\\Controller\\AjaxController" => __DIR__ . "/Controller/AjaxController.php",
 
     "MKWeb\\ImgDB\\Model\\Model" => __DIR__ . "/Model/Model.php",
     "MKWeb\\ImgDB\\Model\\User" => __DIR__ . "/Model/User.php",
@@ -24,6 +25,7 @@ const classes = [
     "MKWeb\\ImgDB\\Model\\Image" => __DIR__ . "/Model/Image.php",
     "MKWeb\\ImgDB\\Model\\Tag" => __DIR__ . "/Model/Tag.php",
     "MKWeb\\ImgDB\\Model\\ImageTag" => __DIR__ . "/Model/ImageTag.php",
+    "MKWeb\\ImgDB\\Model\\Ajax" => __DIR__ . "/Model/Ajax.php",
     
     
     "MKWeb\\ImgDB\\View\\View" => __DIR__ . "/View/View.php",

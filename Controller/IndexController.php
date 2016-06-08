@@ -12,19 +12,13 @@ class IndexController extends Controller {
         if (!empty($this->request->session['user_id'])) {
             $this->template = $this->_setTemplate('inside');
             $user = (new User())->readById($this->request->session['user_id']);
-            $out = (new Gallery())->getGalleriesByUser($user);
-            $galleries = [];
-            if (count($out) >= 3) {
-                $j = 0;
-                for ($i = 0; $i < count($out); $i++) {
-                    $galleries[$j][] = $out[$i];
-                    if (($i+1) % 3 == 0) $j++;
-                }
-            } else if ($out) {
-                $galleries[0] = $out;
-            }
+            $private = (new Gallery())->getGalleriesByUser($user);
+            $public = (new Gallery())->getPublicGalleries();
+            $private = prepareGalleries($private);
+            $public = prepareGalleries($public);
             
-            $this->view->assign('user_galleries', $galleries);
+            $this->view->assign('user_galleries', $private);
+            $this->view->assign('public_galleries', $public);
         }
         /* if the user is loggedin it will redirect the user to the blogs page */
         //return isset($this->request->session['user_id']) ? $this->redirect(ROOT . '/index/index') : null;

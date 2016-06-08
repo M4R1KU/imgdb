@@ -90,6 +90,10 @@ $(document).ready(function() {
         $('#image_add_tags_fields').siblings('div.chip').remove();
     });
 
+    $('#flash-closer').click(function() {
+        $('#flash-closer').parent().parent().parent().remove();
+    });
+
 
 });
 

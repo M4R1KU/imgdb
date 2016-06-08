@@ -15,7 +15,7 @@
                             <i class="material-icons right privacy-icon tooltipped" data-position="bottom"
                                data-delay="50"
                                data-tooltip="<?= ((bool)$gallery->isPrivate()) === true ? 'I am a private gallery.' : 'I am a public gallery.' ?>">lock_<?= ((bool)$gallery->isPrivate()) === true ? 'outline' : 'open' ?></i></span>
-                                <p><?= $gallery->getDescription(); ?></p>
+                                <p class="wrapped"><?= $gallery->getDescription(); ?></p>
                             </div>
                             <div class="card-action">
                                 <?= linkHelper('/gallery/edit?id=' . $gallery->getId(), '<i class="material-icons">edit</i></i>', ['class' => 'grey-text text-darken-4']) ?>
@@ -28,6 +28,38 @@
         <?php endforeach;
     else : ?>
         <p>You don't have any personal galleries.</p>
+    <?php endif; ?>
+</div>
+<div class="public-galleries row">
+    <h4>Some public galleries:</h4>
+    <?php /** @var \MKWeb\ImgDB\Model\Gallery $gallery */
+    if ($this->public_galleries):
+        foreach ($this->public_galleries as $row): ?>
+            <div class="row">
+                <?php foreach ($row as $gallery): ?>
+                    <div class="col s12 m4">
+                        <div class="card z-depth-1-half">
+                            <div class="card-content">
+                        <span class="card-title"><a
+                                href="/gallery/index?id=<?= $gallery->getId() ?>"><?= $gallery->getName(); ?></a>
+                            <i class="material-icons right privacy-icon tooltipped" data-position="bottom"
+                               data-delay="50"
+                               data-tooltip="<?= ((bool)$gallery->isPrivate()) === true ? 'I am a private gallery.' : 'I am a public gallery.' ?>">lock_<?= ((bool)$gallery->isPrivate()) === true ? 'outline' : 'open' ?></i></span>
+                                <p class="wrapped"><?= $gallery->getDescription(); ?></p>
+                            </div>
+                            <div class="card-action">
+                                <?= linkHelper('/gallery/edit?id=' . $gallery->getId(), '<i class="material-icons">edit</i></i>', ['class' => 'grey-text text-darken-4']) ?>
+                                <?= linkHelper('/gallery/delete?id=' . $gallery->getId(), '<i class="material-icons">delete</i></i>', ['class' => 'grey-text text-darken-4']) ?>
+                                <i class="material-icons right tooltipped" data-position="bottom"
+                                    data-delay="50" data-tooltip="This gallery belongs to <?= $gallery->getUser()->getNickname() ?>">account_box</i>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endforeach;
+    else : ?>
+        <p>There aren't any public galleries.</p>
     <?php endif; ?>
 </div>
 <div class="fixed-action-btn" style="bottom: 45px; right: 45px;">

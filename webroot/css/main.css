@@ -7,7 +7,7 @@
 }
 
 .tooltip {
-    background-color: rgb(15,15,15);
+    background-color: rgb(15, 15, 15);
     opacity: 0.8;
     color: #dedede;
     display: block;
@@ -16,173 +16,59 @@
     z-index: 100;
     width: 300px;
 }
+
 .modal.bottom-sheet {
     max-height: 65%;
 }
 
 .privacy-icon {
-    line-height: inherit; !important;
+    line-height: inherit;
+!important;
 }
 
 small {
     color: #777;
 }
 
-.gallery div.image-wrapper {
+div.image-wrapper {
     margin: 10px 0;
 }
 
 .alert-error {
     background-color: #f44336;
 }
+
 .alert-warning {
     background-color: #ffa726;
 }
+
 .alert-info {
     background-color: #90a4ae;
 }
 
-/*
-.main-container {
-    margin-top: 150px;
-    padding-bottom: 50px;
-}
-.form-group input {
-    margin-bottom: 20px;
-}
-.col-lg-5 {
-    padding: 0;
-}
-.panel-primary {
-    border-color: #425180;
-}
-
-.panel-primary>.panel-heading {
-    border-color: #425180;
-    background: #425180;
-}
-.btn-primary {
-    background: #425180;
-    border-color: #425180;
-}
-.form-control:focus {
-    outline: none;
-    border: 1px solid #cccccc;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-}
-
-.has-error .form-control:focus,
-.has-error .form-control {
-    border: 1px solid #D32C16;
-    box-shadow: 0 0 5px 0 #D32C16;
-}
-
-.has-success .form-control:focus,
-.has-success .form-control {
-    border: 1px solid #419641;
-    box-shadow: 0 0 5px 0 #419641;
-}
-
-.entry-table {
-    cursor:pointer;
-}
-.entry-table i{
-    font-size: 18px;
-    color: black;
-}
-
-.entry-content {
-    font-family: 'Roboto Slab';
-    font-size: 20px;
-    letter-spacing: 1.3px;
-    margin-top: 50px;
-}
-.btn-cblog {
+.overlay {
+    position: fixed;
+    z-index: 1000;
+    background-color: #fafafa;
     width: 100%;
+    height: 100%;
+    top: 128px;
+    left: 0;
+    -webkit-animation-duration: .4s !important;
+    -moz-animation-duration: .4s !important;
+    -o-animation-duration: .4s !important;
 }
 
-.comment-section {
-    margin-top: 20px;
-    padding: 0;
+#flash-closer,
+#dismiss {
+    cursor: pointer;
 }
 
-h4.comname i {
-    vertical-align: middle;
+.wrapped {
+    word-wrap: break-word;
+}
+
+.no-results-icon {
     font-size: inherit;
+    vertical-align: middle
 }
-
-.ceditbtn {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-}
-
-.footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 50px;
-}
-
-
-@font-face {
-    font-family: "Open Sans";
-    font-weight: 400;
-    src: url('../fonts/OpenSans-Light.ttf');
-}
-
-@font-face {
-    font-family: "Roboto Slab";
-    font-weight: 400;
-    src: url('../fonts/RobotoSlab-Light.ttf');
-}
-
-@font-face {
-  font-family: 'Material Icons';
-  font-style: normal;
-  font-weight: 400;
-  src: url('../fonts/MaterialIcons.ttf');
-}
-
-.material-icons {
-  font-family: 'Material Icons';
-  font-weight: normal;
-  font-style: normal;
-  font-size: 24px;  !* Preferred icon size *!
-  display: inline-block;
-  width: 1em;
-  height: 1em;
-  line-height: 1;
-  text-transform: none;
-  letter-spacing: normal;
-  word-wrap: normal;
-  white-space: nowrap;
-  direction: ltr;
-
-  !* Support for all WebKit browsers. *!
-  -webkit-font-smoothing: antialiased;
-  !* Support for Safari and Chrome. *!
-  text-rendering: optimizeLegibility;
-
-  !* Support for Firefox. *!
-  -moz-osx-font-smoothing: grayscale;
-
-  !* Support for IE. *!
-  font-feature-settings: 'liga';
-}
-
-// Rules for sizing the icon.
-.material-icons.md-18 { font-size: 18px; }
-.material-icons.md-24 { font-size: 24px; }
-.material-icons.md-36 { font-size: 36px; }
-.material-icons.md-48 { font-size: 48px; }
-
-// Rules for using icons as black on a light background.
-.material-icons.md-dark { color: rgba(0, 0, 0, 0.54); }
-.material-icons.md-dark.md-inactive { color: rgba(0, 0, 0, 0.26); }
-
-// Rules for using icons as white on a dark background.
-.material-icons.md-light { color: rgba(255, 255, 255, 1); }
-.material-icons.md-light.md-inactive { color: rgba(255, 255, 255, 0.3); }
-*/

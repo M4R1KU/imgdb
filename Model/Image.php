@@ -116,6 +116,14 @@ class Image extends Model {
 
     }
 
+    public function userCanSeePicture($name, $user_id) {
+        $query = $this->connection->prepare("SELECT * FROM Image AS i JOIN Gallery AS g ON i.id_gallery = g.gallery_id JOIN User AS u ON g.id_user = u.user_id WHERE g.private = 0 OR i.file_path = ? AND u.user_id = ?");
+        $query->bind_param('si', $name, intval($user_id));
+        $res = $this->readAllArray($query);
+        if ($res) return true;
+        else return false;
+    }
+
 
     /**
      * returns the Image with the given id

@@ -88,6 +88,18 @@ class Gallery extends Model
         return $arr;
     }
     
+    public function getPublicGalleries(){
+        $query = $this->connection->prepare("SELECT * FROM Gallery WHERE private = 0");
+        $res = $this->readAllOrSingle($query);
+        if (!$res) return $res;
+        if (!isset($res[0])) return [$this->constructGallery($res)];
+        $arr = [];
+        foreach ($res as $u) {
+            $arr[] = $this->constructGallery($u);
+        }
+        return $arr;
+    }
+    
     public function deleteById($id) {
         $query = $this->connection->prepare("DELETE FROM Gallery WHERE gallery_id = ?");
         $query->bind_param('i', intval($id));

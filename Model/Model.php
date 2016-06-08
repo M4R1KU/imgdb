@@ -13,7 +13,7 @@ class Model {
      * Model constructor.
      * @param $currentTable
      */
-	public function __construct($currentTable)
+	public function __construct($currentTable = null)
 	{
         $this->currentTable = ucfirst(str_replace(__NAMESPACE__ . '\\', '', $currentTable));
 		$this->connection = DBConnector::getInstance();

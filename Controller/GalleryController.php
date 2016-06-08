@@ -33,12 +33,18 @@ class GalleryController extends Controller
         if (!isset($this->request->params['passed']['id'])){
             return $this->redirect('/index/index' . generateFlash('Gallery id is missing. Can\'t delete gallery.', 'error'));
         }
-        $id = intval($this->request->params['passed']['id']);
+        $id = intval($this->request->params['passed']['id']);        
         $gallery = (new Gallery())->readById($id);
         if (intval($gallery->getUser()->getId()) !== intval($this->request->session['user_id'])) {
             return $this->redirect('/index/index'. generateFlash('You are not allowed to delete this gallery', 'warning'));
         }
         if ($gallery->delete()) {
+            $dirName = getGalleryHash($gallery) . '/';
+            $galleryDir = ABS_FINAL_GALLERY_DIR . $dirName;
+            $galleryThumbnailDir = ABS_THUMBNAIL_GALLERY_DIR . $dirName;
+            if (!is_dir($galleryDir)) deleteDir($galleryDir);
+            if (!is_dir($galleryThumbnailDir)) deleteDir($galleryThumbnailDir);
+
             return $this->redirect('/index/index');
         } else {
             return $this->redirect('/index/index' .generateFlash('Can\'t delete gallery. Unknown problem while deleting gallery', 'error'));
@@ -52,8 +58,8 @@ class GalleryController extends Controller
     }
     
     public function add() {
-        if (!isset($this->request->params['passed']['gallery_add_name']) &&
-            !isset($this->request->params['passed']['gallery_add_description'])) {
+        if (empty($this->request->params['passed']['gallery_add_name']) &&
+            empty($this->request->params['passed']['gallery_add_description'])) {
             return $this->redirect('/index/index' . generateFlash('Some essential information is missing. Could not create a new gallery.', 'error'));
         }
         $name = h($this->request->params['passed']['gallery_add_name']);

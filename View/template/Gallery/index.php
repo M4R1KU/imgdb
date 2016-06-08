@@ -17,6 +17,7 @@
         </div>
     <?php endforeach; ?>
 </div>
+<?php if ($this->request->session['user_id'] == $this->gallery->getUser()->getId()): ?>
 <div class="fixed-action-btn" style="bottom: 45px; right: 45px;">
     <a href="#add-image-modal" class="btn-floating btn-large waves-effect waves-light red add-image-modal-trigger">
         <i class="large material-icons">add</i>
@@ -57,3 +58,4 @@
         </div>
     </div>
 </div>
+<?php endif; ?>
