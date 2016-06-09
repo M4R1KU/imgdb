@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `gallery` (
   `id_user` int(11) DEFAULT NULL,
   `name` varchar(50) DEFAULT NULL,
   `description` varchar(500) DEFAULT NULL,
-  'private' tinyint DEFAULT NULL,
+  `private` tinyint DEFAULT NULL,
   FOREIGN KEY (id_user) REFERENCES User(user_id)
   ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

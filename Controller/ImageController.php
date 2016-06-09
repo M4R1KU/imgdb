@@ -104,10 +104,12 @@ class ImageController extends Controller {
 
         if (count($tagsRequest) > 0) {
             foreach ($tagsRequest as $tag) {
-                if (!$newTag = $tagTable->exists($tag)) {
-                    $newTag = $tagTable->create(new Tag(null, $tag));
+                if ($tag != '') {
+                    if (!$newTag = $tagTable->exists($tag)) {
+                        $newTag = $tagTable->create(new Tag(null, $tag));
+                    }
+                    $imageTagTable->create(new ImageTag(null, $image, $newTag));
                 }
-                $imageTagTable->create(new ImageTag(null, $image, $newTag));
             }
         }
         return $this->redirect('/gallery/index?id=' . $id);
@@ -124,10 +126,8 @@ class ImageController extends Controller {
         $filename = ABS_FINAL_GALLERY_DIR . getGalleryHash($gallery) . '/' . $name;
         if (file_exists($filename)) {
             if ($imageTable->userCanSeePicture($name, $this->request->session['user_id'])) {
-                $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                $this->response->header('Content-Type', finfo_file($finfo, $filename));
+                $this->response->header('Content-Type', mime_content_type($filename));
                 $this->response->header('Content-Length', filesize($filename));
-                finfo_close($finfo);
                 return $this->response->body(file_get_contents($filename));
             }
             else {

@@ -70,7 +70,7 @@ class ImageTagTable extends Model {
     public function readByImage(Image $img) {
         $query = $this->connection->prepare("SELECT * FROM Image_Tag WHERE id_image = ?");
         $query->bind_param('i', intval($img->getId()));
-        $res = $this->readAllOrSingle($query);
+        $res = $this->readAllArray($query);
         $out = [];
         foreach ($res as $imageTag) {
             $out[] = $this->constructImageTag($imageTag);
