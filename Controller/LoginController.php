@@ -50,12 +50,6 @@ class LoginController extends Controller {
         $email = $this->request->params['passed']['email'];
         $pw = $this->request->params['passed']['password'];
         $pwc = $this->request->params['passed']['password_confirmed'];
-
-        error_log(Validator::validateEmail($email));
-        error_log($userTable->isUniqueEmail($email));
-        error_log(Validator::validatePW($pw));
-        error_log(Validator::confirmPW($pw, $pwc));
-
         if (!empty($name) && Validator::validateEmail($email) && $userTable->isUniqueEmail($email) && Validator::validatePW($pw) && Validator::confirmPW($pw, $pwc)) {
             $user = $userTable->create(new User(null, $email, $name, $pw));
             $_SESSION['user_id'] = $user->getId();

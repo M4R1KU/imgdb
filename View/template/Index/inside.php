@@ -48,12 +48,16 @@
                                 <p class="wrapped"><?= $gallery->getDescription(); ?></p>
                             </div>
                             <div class="card-action">
-                                <?php if($gallery->getUser()->getId() == $this->request->session['user_id']): ?>
-                                    <a class="edit grey-text text-darken-4" onclick="editGallery(this, <?= $gallery->getId() ?>)"><i class="material-icons">edit</i></i></a>
-                                    <?= linkHelper('/gallery/delete?id=' . $gallery->getId(), '<i class="material-icons">delete</i></i>', ['class' => 'grey-text text-darken-4']) ?>
-                                <?php endif; ?>
-                                <i class="material-icons right tooltipped" data-position="bottom"
-                                    data-delay="50" data-tooltip="This gallery belongs to <?= h($gallery->getUser()->getNickname()) ?>">account_box</i>
+                                <?php if($gallery->getUser()->getId() == $this->request->session['user_id']) { ?>
+                                    <a class="edit grey-text text-darken-4" onclick="editGallery(this, <?= $gallery->getId(); ?>)"><i class="material-icons">edit</i></i></a>
+                                    <?= linkHelper('/gallery/delete?id=' . $gallery->getId(), '<i class="material-icons">delete</i></i>', ['class' => 'grey-text text-darken-4']); ?>
+                                    <i class="material-icons right tooltipped" data-position="bottom"
+                                       data-delay="50" data-tooltip="This gallery belongs to <?= h($gallery->getUser()->getNickname()) ?>">account_box</i>
+                                <?php } else { ?>
+                                    <i class="material-icons tooltipped" data-position="bottom"
+                                       data-delay="50" data-tooltip="This gallery belongs to <?= h($gallery->getUser()->getNickname()) ?>">account_box</i>
+                                <?php } ?>
+
                             </div>
                         </div>
                     </div>
