@@ -129,16 +129,21 @@ function prepareGalleries($out) {
     return $galleries;
 }
 
-function deleteDir($dir)
-{
-    $it = new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS);
-    $files = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::CHILD_FIRST);
+function deleteDir($dir) {
+    if (! is_dir($dir)) {
+        throw new InvalidArgumentException("$dir must be a directory");
+    }
+    if (substr($dir, strlen($dir) - 1, 1) != '/') {
+        $dir .= '/';
+    }
+    $files = glob($dir . '*', GLOB_MARK);
     foreach ($files as $file) {
-        if ($file->isDir()) {
-            rmdir($file->getRealPath());
+        if (is_dir($file)) {
+            deleteDir($file);
         } else {
-            unlink($file->getRealPath());
+            unlink($file);
         }
     }
     rmdir($dir);
+
 }

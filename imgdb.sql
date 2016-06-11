@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `gallery` (
   `description` varchar(500) DEFAULT NULL,
   `private` tinyint DEFAULT NULL,
   FOREIGN KEY (id_user) REFERENCES User(user_id)
-  ON DELETE CASCADE ON UPDATE CASCADE
+    ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS `image` (
   `description` varchar(100) DEFAULT NULL,
   `file_path` varchar(200) DEFAULT NULL,
   FOREIGN KEY (id_gallery) REFERENCES Gallery(gallery_id)
-  ON DELETE CASCADE ON UPDATE CASCADE
+    ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -74,9 +74,9 @@ CREATE TABLE IF NOT EXISTS `image_tag` (
   `id_image` int(11) DEFAULT NULL,
   `id_tag` int(11) DEFAULT NULL,
   FOREIGN KEY (id_image) REFERENCES Image(image_id)
-  ON DELETE CASCADE ON UPDATE CASCADE,
+    ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY (id_tag) REFERENCES Tag(tag_id)
-  ON DELETE CASCADE ON UPDATE CASCADE
+    ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------

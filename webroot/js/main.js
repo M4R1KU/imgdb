@@ -1,10 +1,6 @@
 $(document).ready(function() {
-    $(".button-collapse").sideNav();  
-});
+    $(".button-collapse").sideNav();
 
-
-
-$(document).ready(function() {
 	$('tr').on("click", function() {
     	window.location = $(this).data('href');
 	});
@@ -74,10 +70,10 @@ $(document).ready(function() {
             var tags = $(tag_field).val().split(" ");
             $(tag_field).siblings('input').remove();
             $(tag_field).siblings('div.chip').remove();
-            $(tag_field).after('<input type="hidden" name="image_add_tags" id="image_add_tags" value="' + tags + '">');
+            $(tag_field).after('<input type="hidden" name="image_add_tags" id="image_add_tags" value="' + escapeHtml(tags) + '">');
             for (var i = 0; i < tags.length; i++) {
                 if (tags[i] != "") {
-                    $(tag_field).after('<div class="chip">' + tags[i] + '</div>')
+                    $(tag_field).after('<div class="chip">' + escapeHtml(tags[i]) + '</div>')
                 }
             }
         } else {
@@ -96,4 +92,19 @@ $(document).ready(function() {
 
 
 });
+
+function escapeHtml(text) {
+    if (text instanceof Array) {
+        for (var i = 0; i < text.length; i++) {
+            text[i] = escapeHtml(text[i]);
+        }
+        return text;
+    }
+    return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
 

@@ -116,7 +116,7 @@ class ImageController extends Controller {
     }
 
     public function edit() {
-        if (!isset($this->request->params['passed']['image_edit_title']) || (!isset($this->request->params['passed']['image_edit_description']))) return $this->redirect('/error/index?id=400');
+        if (!isset($this->request->params['passed']['image_edit_title']) || (!isset($this->request->params['passed']['image_edit_description']))) return $this->redirect('/Error/index?id=400');
         $imageTable = new ImageTable();
 
 
@@ -126,7 +126,7 @@ class ImageController extends Controller {
 
         $image = $imageTable->readById($id);
 
-        if ($image->getGallery()->getUser()->getId() != $this->request->session['user_id']) return $this->redirect('/error/index?id=403');
+        if ($image->getGallery()->getUser()->getId() != $this->request->session['user_id']) return $this->redirect('/Error/index?id=403');
 
         $image->setTitle($title);
         $image->setDescription($description);
@@ -138,13 +138,13 @@ class ImageController extends Controller {
 
 
     public function delete() {
-        if (empty($this->request->params['passed']['id'])) return $this->redirect('/error/index?error=400');
+        if (empty($this->request->params['passed']['id'])) return $this->redirect('/Error/index?error=400');
         $imageTable = new ImageTable();
 
         $id = $this->request->params['passed']['id'];
         $image = $imageTable->readById($id);
 
-        if ($image->getGallery()->getUser()->getId() != $this->request->session['user_id']) return $this->redirect('/error/index?id=403');
+        if ($image->getGallery()->getUser()->getId() != $this->request->session['user_id']) return $this->redirect('/Error/index?id=403');
 
         if ($imageTable->delete($image)) {
             return $this->redirect('/gallery/index?id=' . $image->getGallery()->getId());
@@ -155,7 +155,7 @@ class ImageController extends Controller {
 
     // TODO
     public function index() {
-        if (empty($this->request->params['passed']['name']) || empty($this->request->params['passed']['gid'])) return $this->redirect('/error/index?error=400');
+        if (empty($this->request->params['passed']['name']) || empty($this->request->params['passed']['gid'])) return $this->redirect('/Error/index?error=400');
         $galleryTable = new GalleryTable();
         $imageTable = new ImageTable();
 
@@ -169,11 +169,11 @@ class ImageController extends Controller {
                 return $this->response->body(file_get_contents($filename));
             }
             else {
-                return $this->redirect('/error/index?error=403&msg=You are not allowed to see this image');
+                return $this->redirect('/Error/index?error=403&msg=You are not allowed to see this image');
             }
 
         }
-        return $this->redirect('/error/index?error=404&The requested image was not found on the server');
+        return $this->redirect('/Error/index?error=404&The requested image was not found on the server');
     }
 
 }

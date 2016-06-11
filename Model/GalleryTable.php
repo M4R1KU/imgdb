@@ -105,6 +105,16 @@ class GalleryTable extends Model
     }
 
     /**
+     * @param Gallery $gallery
+     * @return bool
+     */
+    public function update($gallery) {
+        $query = $this->connection->prepare("UPDATE gallery SET name = ?, description = ?, private = ? WHERE gallery_id = ?");
+        $query->bind_param('ssii', $gallery->getName(), $gallery->getDescription(), $gallery->isPrivate(), $gallery->getId());
+        return $this->exec($query);
+    }
+
+    /**
      * return an array with every gallery in it which are available in the database
      *
      * @return array

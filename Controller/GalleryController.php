@@ -26,7 +26,6 @@ class GalleryController extends Controller
 
         $id = intval($this->request->params['passed']['id']);
         $gallery = $galleryTable->readById($id);
-        print_r($gallery);
         if (!$gallery) return $this->redirect('/Error/index?error=404&msg=Can\'t find gallery.');
 
         $images = $imageTable->getImagesByGallery($gallery);
@@ -47,11 +46,15 @@ class GalleryController extends Controller
             return $this->redirect('/index/index'. generateFlash('You are not allowed to delete this gallery', 'warning'));
         }
         if ($galleryTable->delete($gallery)) {
-            $dirName = getGalleryHash($gallery) . '/';
+            $dirName = getGalleryHash($gallery);
             $galleryDir = ABS_FINAL_GALLERY_DIR . $dirName;
             $galleryThumbnailDir = ABS_THUMBNAIL_GALLERY_DIR . $dirName;
-            if (!is_dir($galleryDir)) deleteDir($galleryDir);
-            if (!is_dir($galleryThumbnailDir)) deleteDir($galleryThumbnailDir);
+            try {
+                deleteDir($galleryDir);
+                deleteDir($galleryThumbnailDir);
+            } catch (\InvalidArgumentException $e) {
+                return $this->redirect('/Error/index?id=400');
+            }
 
             return $this->redirect('/index/index');
         } else {
@@ -60,8 +63,30 @@ class GalleryController extends Controller
     }
     
     public function edit() {
-        if (!isset($this->request->params['passed']['id'])) {
+        if (empty($this->request->params['passed']['id']) ||
+            empty($this->request->params['passed']['gallery_add_name']) ||
+            empty($this->request->params['passed']['gallery_add_description'])) {
             return $this->redirect('/index/index' . generateFlash('Gallery id is missing. Can\'t edit gallery.', 'error'));
+        }
+        $galleryTable = new GalleryTable();
+
+        $name = $this->request->params['passed']['gallery_add_name'];
+        $description = nl2br(h($this->request->params['passed']['gallery_add_description']));
+        $private = isset($this->request->params['passed']['gallery_add_private']) && $this->request->params['passed']['gallery_add_private'] === 'private';
+        $id = $this->request->params['passed']['id'];
+
+        $gallery = $galleryTable->readById($id);
+
+        if ($gallery->getUser()->getId() != $this->request->session['user_id']) return $this->redirect('/Error/index?error=403');
+
+        $gallery->setName($name);
+        $gallery->setDescription($description);
+        $gallery->setPrivate($private);
+        if ($galleryTable->update($gallery)) {
+            return $this->redirect('/gallery/index' . generateFlash('Gallery attributes updated', 'success') . '&id=' . $id);
+        }
+        else {
+            return $this->redirect('/gallery/index' . generateFlash('Couldn\'t update gallery attributes', 'error') . '&id=' . $id);
         }
     }
     
@@ -73,7 +98,7 @@ class GalleryController extends Controller
         $galleryTable = new GalleryTable();
         $userTable = new UserTable();
 
-        $name = h($this->request->params['passed']['gallery_add_name']);
+        $name = $this->request->params['passed']['gallery_add_name'];
         $description = nl2br(h($this->request->params['passed']['gallery_add_description']));
         $private = isset($this->request->params['passed']['gallery_add_private']) && $this->request->params['passed']['gallery_add_private'] === 'private';
         $gallery = $galleryTable->create(new Gallery(null, $name, $description, $userTable->readById(intval($this->request->session['user_id'])), $private));

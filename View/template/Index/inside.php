@@ -11,14 +11,14 @@
                         <div class="card z-depth-1-half">
                             <div class="card-content">
                         <span class="card-title"><a
-                                href="/gallery/index?id=<?= $gallery->getId() ?>"><?= $gallery->getName(); ?></a>
+                                href="/gallery/index?id=<?= $gallery->getId() ?>" class="title"><?= h($gallery->getName()); ?></a>
                             <i class="material-icons right privacy-icon tooltipped" data-position="bottom"
                                data-delay="50"
                                data-tooltip="<?= ((bool)$gallery->isPrivate()) === true ? 'I am a private gallery.' : 'I am a public gallery.' ?>">lock_<?= ((bool)$gallery->isPrivate()) === true ? 'outline' : 'open' ?></i></span>
-                                <p class="wrapped"><?= $gallery->getDescription(); ?></p>
+                                <p class="wrapped description"><?= $gallery->getDescription(); ?></p>
                             </div>
                             <div class="card-action">
-                                <?= linkHelper('/gallery/edit?id=' . $gallery->getId(), '<i class="material-icons">edit</i></i>', ['class' => 'grey-text text-darken-4']) ?>
+                                <a class="edit grey-text text-darken-4" onclick="editGallery(this, <?= $gallery->getId() ?>)"><i class="material-icons">edit</i></i></a>
                                 <?= linkHelper('/gallery/delete?id=' . $gallery->getId(), '<i class="material-icons">delete</i></i>', ['class' => 'grey-text text-darken-4']) ?>
                             </div>
                         </div>
@@ -41,17 +41,19 @@
                         <div class="card z-depth-1-half">
                             <div class="card-content">
                         <span class="card-title"><a
-                                href="/gallery/index?id=<?= $gallery->getId() ?>"><?= $gallery->getName(); ?></a>
+                                href="/gallery/index?id=<?= $gallery->getId() ?>"><?=h($gallery->getName()); ?></a>
                             <i class="material-icons right privacy-icon tooltipped" data-position="bottom"
                                data-delay="50"
                                data-tooltip="<?= ((bool)$gallery->isPrivate()) === true ? 'I am a private gallery.' : 'I am a public gallery.' ?>">lock_<?= ((bool)$gallery->isPrivate()) === true ? 'outline' : 'open' ?></i></span>
                                 <p class="wrapped"><?= $gallery->getDescription(); ?></p>
                             </div>
                             <div class="card-action">
-                                <?= linkHelper('/gallery/edit?id=' . $gallery->getId(), '<i class="material-icons">edit</i></i>', ['class' => 'grey-text text-darken-4']) ?>
-                                <?= linkHelper('/gallery/delete?id=' . $gallery->getId(), '<i class="material-icons">delete</i></i>', ['class' => 'grey-text text-darken-4']) ?>
+                                <?php if($gallery->getUser()->getId() == $this->request->session['user_id']): ?>
+                                    <a class="edit grey-text text-darken-4" onclick="editGallery(this, <?= $gallery->getId() ?>)"><i class="material-icons">edit</i></i></a>
+                                    <?= linkHelper('/gallery/delete?id=' . $gallery->getId(), '<i class="material-icons">delete</i></i>', ['class' => 'grey-text text-darken-4']) ?>
+                                <?php endif; ?>
                                 <i class="material-icons right tooltipped" data-position="bottom"
-                                    data-delay="50" data-tooltip="This gallery belongs to <?= $gallery->getUser()->getNickname() ?>">account_box</i>
+                                    data-delay="50" data-tooltip="This gallery belongs to <?= h($gallery->getUser()->getNickname()) ?>">account_box</i>
                             </div>
                         </div>
                     </div>
@@ -96,7 +98,7 @@
                     <button class="btn waves-effect waves-light" type="submit" name="gallery_add_submit">
                         Submit<i class="material-icons right">send</i>
                     </button>
-                    <button class="btn waves-effect waves-light" type="reset" name="gallery_add_submit">
+                    <button class="btn waves-effect waves-light" type="reset" name="gallery_add_reset" id="gallery_add_reset">
                         Reset<i class="material-icons right">close</i>
                     </button>
                 </form>
@@ -104,3 +106,4 @@
         </div>
     </div>
 </div>
+<script src="/js/gallery.js"></script>

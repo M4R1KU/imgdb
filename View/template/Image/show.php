@@ -23,9 +23,10 @@
         </div>
         <div class="row tags">
             <?php
+            /** @var MKWeb\ImgDB\Model\Entity\Tag $tag */
             if (count($this->tags) > 0):
                 foreach ($this->tags as $tag): ?>
-                    <div class="chip"><?= $tag->getName() ?></div>
+                    <div class="chip"><?= h($tag->getName()) ?></div>
                 <?php endforeach;
             else: ?>
                 <p>This image does not have tags.</p>
@@ -38,12 +39,12 @@
     <form class="col s12" action="/image/edit" method="post">
         <div class="row">
             <div class="input-field col s12">
-                <input name="image_edit_title" id="image_edit_title" type="text" class="validate" <?= ($this->currentImage->getTitle() != null || strlen($this->currentImage->getTitle()) > 0) ? 'value="' . $this->currentImage->getTitle() . '"' : '' ?>>
+                <input name="image_edit_title" id="image_edit_title" type="text" class="validate" <?= ($this->currentImage->getTitle() != null || strlen($this->currentImage->getTitle()) > 0) ? 'value="' . h($this->currentImage->getTitle()) . '"' : '' ?>>
                 <label for="image_edit_title">Title</label>
             </div>
                 <div class="input-field col s12">
                     <textarea id="image_edit_description" name="image_edit_description"
-                                      class="materialize-textarea" maxlength="100" length="100"><?= $this->currentImage->getDescription() ?></textarea>
+                                      class="materialize-textarea" maxlength="100" length="100"><?= h($this->currentImage->getDescription()) ?></textarea>
                 <label for="gallery_add_description">Image Description</label>
             </div>
             <input type="hidden" id="image_edit_id" name="image_edit_id" value="<?= $this->currentImage->getId() ?>">

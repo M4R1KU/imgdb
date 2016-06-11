@@ -8,8 +8,7 @@
     <link type="text/css" rel="stylesheet" href="/css/materialize.min.css" media="screen,projection"/>
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/animate.css">
-
-
+    <script src="/js/jquery-2.1.4.min.js"></script>
 </head>
 <body>
 <nav class="blue-grey darken-4">
@@ -48,7 +47,6 @@
         ?>
     </div>
 </main>
-<script src="/js/jquery-2.1.4.min.js"></script>
 <script type="text/javascript" src="/js/materialize.min.js"></script>
 <script type="text/javascript" src="/js/main.js"></script>
 <script type="text/javascript" src="/js/search.js"></script>
