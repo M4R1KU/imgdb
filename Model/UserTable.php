@@ -9,7 +9,7 @@ namespace MKWeb\ImgDB\Model;
 
 use MKWeb\ImgDB\Model\Entity\User;
 
-class UserTable extends Model {
+class UserTable extends Model implements Table {
     /**
      * UserTable constructor.
      */
@@ -101,11 +101,27 @@ class UserTable extends Model {
     }
 
     /**
+     * @deprecated
      * @param $id
      * @return User
      */
     public function readById($id)
     {
         return $this->constructUser(parent::readById($id));
+    }
+
+    function delete($object)
+    {
+        return false;
+    }
+
+    /**
+     * @deprecated
+     * @param $id
+     * @return bool
+     */
+    function deleteById($id)
+    {
+        return false;
     }
 }

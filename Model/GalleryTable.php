@@ -12,7 +12,7 @@ namespace MKWeb\ImgDB\Model;
 use MKWeb\ImgDB\Model\Entity\Gallery;
 use MKWeb\ImgDB\Model\Entity\User;
 
-class GalleryTable extends Model
+class GalleryTable extends Model implements Table
 {
     /**
      * Gallery constructor.

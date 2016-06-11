@@ -12,7 +12,7 @@ class Request
     public $uri;
 
     /**
-     * base uri wich is not used for the request to the controller
+     * base uri which is not used for the request to the controller
      * @var string
      */
     public $base;

@@ -52,14 +52,6 @@ class ControllerResolver {
 
 		if (!empty($controller)) {
 			$class = "MKWeb\\ImgDB\\Controller\\" . ucfirst($controller) . "Controller";
-			$file = $this->path . ucfirst($controller) . 'Controller.php';
-			/*if (!file_exists($file)) {
-				if (empty($this->defaultcontroller)) {
-					return null;
-				}
-				$file = "{$this->path}{$this->defaultcontroller}Controller.php";
-			}
-			include_once($file);*/
 			if (!class_exists($class, true)) {
 				$this->request->params['action'] = 'Index';
 				$this->request->params['passed']['error'] = '404';

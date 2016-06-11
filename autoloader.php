@@ -20,6 +20,7 @@ const classes = [
     "MKWeb\\ImgDB\\Controller\\AjaxController" => __DIR__ . "/Controller/AjaxController.php",
 
     "MKWeb\\ImgDB\\Model\\Model" => __DIR__ . "/Model/Model.php",
+    "MKWeb\\ImgDB\\Model\\Table" => __DIR__ . "/Model/Table.php",
     "MKWeb\\ImgDB\\Model\\UserTable" => __DIR__ . "/Model/UserTable.php",
     "MKWeb\\ImgDB\\Model\\GalleryTable" => __DIR__ . "/Model/GalleryTable.php",
     "MKWeb\\ImgDB\\Model\\ImageTable" => __DIR__ . "/Model/ImageTable.php",

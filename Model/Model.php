@@ -6,7 +6,15 @@ use MKWeb\ImgDB\lib\DBConnector;
 
 class Model {
 
+    /**
+     * name of the current Table
+     * @var mixed
+     */
     protected $currentTable;
+    /**
+     * connection object for the database
+     * @var \mysqli
+     */
 	protected $connection;
 
     /**

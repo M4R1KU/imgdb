@@ -4,7 +4,7 @@
 define('DS', '/');
 
 //Root Directory of the project
-define('ROOT', dirname(__DIR__));//str_replace($_SERVER['DOCUMENT_ROOT'], '', str_replace('\\', DS, dirname(__DIR__))));
+define('ROOT', dirname(__DIR__));
 
 
 //webroot of the project (contains css, js etc.)

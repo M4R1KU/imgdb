@@ -13,7 +13,7 @@ use MKWeb\ImgDB\Model\Entity\ImageTag;
 use MKWeb\ImgDB\Model\Entity\Tag;
 
 
-class ImageTagTable extends Model {
+class ImageTagTable extends Model implements Table {
     /**
      * ImageTagTable constructor.
      */

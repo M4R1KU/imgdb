@@ -11,9 +11,9 @@ use MKWeb\ImgDB\View\View;
  * The Controller handles the actual request
  * and renders the response
  *
- * The Controller should have multiple subclasses with diffrent Controlleractions
+ * The Controller should have multiple subclasses with different Controlleractions
  *
- * if the url /login/add is requested then it calls the add mehtod of the index controller
+ * if the url /login/add is requested then it calls the add method of the index controller
  *
  * with the redirect method it is possible to redirect within the controller action
  *

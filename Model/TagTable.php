@@ -11,7 +11,7 @@ namespace MKWeb\ImgDB\Model;
 
 use MKWeb\ImgDB\Model\Entity\Tag;
 
-class TagTable extends Model {
+class TagTable extends Model implements Table {
     /**
      * TagTable constructor.
      */
