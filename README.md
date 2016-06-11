@@ -11,6 +11,8 @@ The whole structure is inspired by the CakePHP framework which I used recently f
 
 # Installation:
 
+Installationsanleitung in MVC-Dokumentation-Mario-Kunz.docx
+
 - extension=php_fileinfo.dll must be enabled.
 - The document root of the webserver must be on the webroot directory.
 - run imgdb.sql
