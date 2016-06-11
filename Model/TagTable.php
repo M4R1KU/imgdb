@@ -44,7 +44,7 @@ class TagTable extends Model {
      * @return bool|Tag
      */
     public function create($tag) {
-        $query = $this->connection->prepare("INSERT INTO Tag (name) VALUES (?)");
+        $query = $this->connection->prepare("INSERT INTO tag (name) VALUES (?)");
         $query->bind_param('s', $tag->getName());
         if (!$query->execute()) return false;
         $tag->setId($this->connection->insert_id);
@@ -52,7 +52,7 @@ class TagTable extends Model {
     }
 
     public function deleteById($id) {
-        $query = $this->connection->prepare("DELETE FROM Tag WHERE tag_id = ?");
+        $query = $this->connection->prepare("DELETE FROM tag WHERE tag_id = ?");
         $query->bind_param('i', intval($id));
         return $this->exec($query);
     }
@@ -66,7 +66,7 @@ class TagTable extends Model {
     }
 
     public function exists($name) {
-        $query = $this->connection->prepare("SELECT * FROM Tag WHERE name = ?");
+        $query = $this->connection->prepare("SELECT * FROM tag WHERE name = ?");
         $query->bind_param('s', $name);
         if (!$result = $this->readAllOrSingle($query)) {
             return false;

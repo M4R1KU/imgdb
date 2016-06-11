@@ -42,7 +42,7 @@ class UserTable extends Model {
      * @return User
      */
     public function constructUserByEmail($email) {
-        $query = $this->connection->prepare("SELECT * FROM User WHERE email like ?");
+        $query = $this->connection->prepare("SELECT * FROM user WHERE email like ?");
         $query->bind_param('s', $email);
         $res = $this->readAllOrSingle($query);
         return $this->constructUser($res);
@@ -57,7 +57,7 @@ class UserTable extends Model {
      * @return bool|User
      */
     public function create($user) {
-        $query = $this->connection->prepare("INSERT INTO User (email, nickname, password) VALUES (?, ?, ?)");
+        $query = $this->connection->prepare("INSERT INTO user (email, nickname, password) VALUES (?, ?, ?)");
         $query->bind_param('sss', $user->getEmail(), $user->getNickname(), password_hash($user->getPassword(), PASSWORD_BCRYPT));
         if (!$query->execute()) return false;
         $user->setId($this->connection->insert_id);
@@ -81,7 +81,7 @@ class UserTable extends Model {
      * @return bool
      */
     public function isUniqueEmail($email) {
-        $query = $this->connection->prepare("SELECT user_id FROM User where email like ?");
+        $query = $this->connection->prepare("SELECT user_id FROM user where email like ?");
         $query->bind_param('s', $email);
         $res = $this->readAllOrSingle($query);
         return empty($res);

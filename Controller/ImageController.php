@@ -30,7 +30,7 @@ class ImageController extends Controller {
         $image = $imageTable->readById($id);
         $gallery = $image->getGallery();
         if ($gallery->getUser()->getId() != $this->request->session['user_id']) {
-            if ($gallery->isPrivate() === true) {
+            if ($gallery->isPrivate()) {
                 return $this->redirect('/Error/index?error=403&msg=You are not allowed to see this picture.');
             }
         }
@@ -72,7 +72,7 @@ class ImageController extends Controller {
         $imageTable = new ImageTable();
         $tagTable = new TagTable();
         $imageTagTable = new ImageTagTable();
-        $allowed_types = ['image/jpg', 'image/jpeg', 'image/png'];
+        $allowed_types = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif'];
 
         $id = intval($this->request->params['passed']['image_add_gallery_id']);
         $file = $this->request->params['passed']['image_add_file'];
@@ -114,6 +114,44 @@ class ImageController extends Controller {
         }
         return $this->redirect('/gallery/index?id=' . $id);
     }
+
+    public function edit() {
+        if (!isset($this->request->params['passed']['image_edit_title']) || (!isset($this->request->params['passed']['image_edit_description']))) return $this->redirect('/error/index?id=400');
+        $imageTable = new ImageTable();
+
+
+        $title = $this->request->params['passed']['image_edit_title'];
+        $description = $this->request->params['passed']['image_edit_description'];
+        $id = $this->request->params['passed']['image_edit_id'];
+
+        $image = $imageTable->readById($id);
+
+        if ($image->getGallery()->getUser()->getId() != $this->request->session['user_id']) return $this->redirect('/error/index?id=403');
+
+        $image->setTitle($title);
+        $image->setDescription($description);
+        if ($imageTable->update($image)) {
+            return $this->redirect('/image/show' . generateFlash('Image attributes updated.', 'success') . '&id=' . $id);
+        }
+        return $this->redirect('/image/show' . generateFlash('Error while updating image attributes.', 'error') . '&id=' . $id);
+    }
+
+
+    public function delete() {
+        if (empty($this->request->params['passed']['id'])) return $this->redirect('/error/index?error=400');
+        $imageTable = new ImageTable();
+
+        $id = $this->request->params['passed']['id'];
+        $image = $imageTable->readById($id);
+
+        if ($image->getGallery()->getUser()->getId() != $this->request->session['user_id']) return $this->redirect('/error/index?id=403');
+
+        if ($imageTable->delete($image)) {
+            return $this->redirect('/gallery/index?id=' . $image->getGallery()->getId());
+        }
+        return $this->redirect('/gallery/index' . generateFlash('Couldn\'t delete image.', 'error') . '&id=' . $image->getGallery()->getId());
+    }
+
 
     // TODO
     public function index() {

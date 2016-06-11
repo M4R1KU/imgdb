@@ -32,6 +32,16 @@ small {
 
 div.image-wrapper {
     margin: 10px 0;
+    height: 200px !important;
+}
+.image-wrapper > a {
+    text-align: center;
+    margin: 0 auto;
+}
+
+#image-show {
+    /*text-align: center;*/
+    /*margin: 0 auto;*/
 }
 
 .alert-error {
@@ -44,6 +54,9 @@ div.image-wrapper {
 
 .alert-info {
     background-color: #90a4ae;
+}
+.alert-success {
+    background-color: #4caf50;
 }
 
 .overlay {

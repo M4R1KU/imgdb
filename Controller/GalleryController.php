@@ -26,6 +26,7 @@ class GalleryController extends Controller
 
         $id = intval($this->request->params['passed']['id']);
         $gallery = $galleryTable->readById($id);
+        print_r($gallery);
         if (!$gallery) return $this->redirect('/Error/index?error=404&msg=Can\'t find gallery.');
 
         $images = $imageTable->getImagesByGallery($gallery);
@@ -65,7 +66,7 @@ class GalleryController extends Controller
     }
     
     public function add() {
-        if (empty($this->request->params['passed']['gallery_add_name']) &&
+        if (empty($this->request->params['passed']['gallery_add_name']) ||
             empty($this->request->params['passed']['gallery_add_description'])) {
             return $this->redirect('/index/index' . generateFlash('Some essential information is missing. Could not create a new gallery.', 'error'));
         }

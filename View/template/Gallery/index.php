@@ -12,7 +12,7 @@
     foreach ($this->images as $image): ?>
         <div class="col l3 m6 s12 image-wrapper valign-wrapper">
             <a href="/image/show?id=<?= $image->getId() ?>">
-                <img class="responsive-img valign hoverable" src="<?= REL_THUMBNAIL_GALLERY_DIR . getGalleryHash($this->gallery) . '/' . $image->getFilePath() ?>">
+                <img class="responsive-img valign hoverable center" src="<?= REL_THUMBNAIL_GALLERY_DIR . getGalleryHash($this->gallery) . '/' . $image->getFilePath() ?>">
             </a>
         </div>
     <?php endforeach; ?>

@@ -56,11 +56,23 @@ function resizeAndMoveImage($galleryDir, $galleryThumbnailDir, $newFilename)
     $newWidth = $width / ($height / THUMBNAIL_HEIGHT);
 
     $thumb = imagecreatetruecolor($newWidth, $newHeight);
-    $source = imagecreatefromjpeg($galleryDir . $newFilename);
+    $source = getImageByType($galleryDir . $newFilename);
 
     imagecopyresized($thumb, $source, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
 
     imagejpeg($thumb, $galleryThumbnailDir . $newFilename);
+}
+
+function getImageByType($image) {
+    $ext = pathinfo($image, PATHINFO_EXTENSION);
+    if ($ext == "png")
+        return imagecreatefrompng($image);
+    if ($ext == "gif")
+        return imagecreatefromgif($image);
+    if ($ext == "jpg" || $ext == "png")
+        return imagecreatefromjpeg($image);
+
+    return null;
 }
 
 function getGalleryHash(\MKWeb\ImgDB\Model\Entity\Gallery $gallery)

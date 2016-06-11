@@ -46,7 +46,7 @@ class ImageTagTable extends Model {
      * @return bool|ImageTag
      */
     public function create($imageTag) {
-        $query = $this->connection->prepare("INSERT INTO Image_Tag (id_image, id_tag) VALUES (?, ?)");
+        $query = $this->connection->prepare("INSERT INTO image_tag (id_image, id_tag) VALUES (?, ?)");
         $query->bind_param('ii',$imageTag->getImage()->getId(), $imageTag->getTag()->getId());
         if (!$query->execute()) return false;
         $imageTag->setId($this->connection->insert_id);
@@ -54,7 +54,7 @@ class ImageTagTable extends Model {
     }
 
     public function deleteById($id) {
-        $query = $this->connection->prepare("DELETE FROM Image_Tag WHERE image_id_id = ?");
+        $query = $this->connection->prepare("DELETE FROM image_tag WHERE image_id_id = ?");
         $query->bind_param('i', intval($id));
         return $this->exec($query);
     }
@@ -68,7 +68,7 @@ class ImageTagTable extends Model {
     }
     
     public function readByImage(Image $img) {
-        $query = $this->connection->prepare("SELECT * FROM Image_Tag WHERE id_image = ?");
+        $query = $this->connection->prepare("SELECT * FROM image_tag WHERE id_image = ?");
         $query->bind_param('i', intval($img->getId()));
         $res = $this->readAllArray($query);
         $out = [];
@@ -79,7 +79,7 @@ class ImageTagTable extends Model {
     }
     
     public function readByTag(Tag $tag) {
-        $query = $this->connection->prepare("SELECT * FROM Image_Tag WHERE id_tag = ?");
+        $query = $this->connection->prepare("SELECT * FROM image_tag WHERE id_tag = ?");
         $query->bind_param('i', intval($tag->getId()));
         $res = $this->readAllOrSingle($query);
         $out = [];

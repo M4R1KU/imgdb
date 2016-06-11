@@ -47,7 +47,7 @@ class GalleryTable extends Model
      * @return bool|Gallery
      */
     public function create($gallery) {
-        $query = $this->connection->prepare("INSERT INTO Gallery (id_user, name, description, private) VALUES (?, ?, ?, ?)");
+        $query = $this->connection->prepare("INSERT INTO gallery (id_user, name, description, private) VALUES (?, ?, ?, ?)");
         $query->bind_param('issi', $gallery->getUser()->getId(), $gallery->getName(), $gallery->getDescription(), $gallery->isPrivate());
         if (!$query->execute()) return false;
         $gallery->setId($this->connection->insert_id);
@@ -66,7 +66,7 @@ class GalleryTable extends Model
     
     public function getGalleriesByUser(User $user) {
         $uid = $user->getId();
-        $query = $this->connection->prepare("SELECT * FROM Gallery WHERE id_user = ?");
+        $query = $this->connection->prepare("SELECT * FROM gallery WHERE id_user = ?");
         $query->bind_param('i', intval($uid));
         $res = $this->readAllOrSingle($query);
         if (!$res) return $res;
@@ -79,7 +79,7 @@ class GalleryTable extends Model
     }
     
     public function getPublicGalleries(){
-        $query = $this->connection->prepare("SELECT * FROM Gallery WHERE private = 0");
+        $query = $this->connection->prepare("SELECT * FROM gallery WHERE private = 0");
         $res = $this->readAllOrSingle($query);
         if (!$res) return $res;
         if (!isset($res[0])) return [$this->constructGallery($res)];
@@ -91,7 +91,7 @@ class GalleryTable extends Model
     }
     
     public function deleteById($id) {
-        $query = $this->connection->prepare("DELETE FROM Gallery WHERE gallery_id = ?");
+        $query = $this->connection->prepare("DELETE FROM gallery WHERE gallery_id = ?");
         $query->bind_param('i', intval($id));
         return $this->exec($query);
     }

@@ -29,7 +29,7 @@ class LoginController extends Controller {
         if ($user && $userTable->checkLogin($pw, $user)) {
             $_SESSION['user_id'] = $user->getId();
             $_SESSION['nickname'] = $user->getNickname();
-            return $this->redirect('/index/index');
+            return $this->redirect('/index/index' . generateFlash('Login completed', 'success'));
         }
         return $this->redirect('/login/index' . generateFlash('Login failed. Your password or username is incorrect.', 'error'));
     }
@@ -37,7 +37,7 @@ class LoginController extends Controller {
     public function logout() {
         unset($_SESSION);
         session_destroy();
-        return $this->redirect('/index/index');
+        return $this->redirect('/index/index' .generateFlash('Logout successful.', 'success'));
     }
 
     public function add() {
@@ -50,11 +50,11 @@ class LoginController extends Controller {
         $email = $this->request->params['passed']['email'];
         $pw = $this->request->params['passed']['password'];
         $pwc = $this->request->params['passed']['password_confirmed'];
-        if (!empty($name) && Validator::validateEmail($email) && $userTable->isUniqueEmail($email) && !Validator::validatePW($pw) && Validator::confirmPW($pw, $pwc)) {
+        if (!empty($name) && Validator::validateEmail($email) && $userTable->isUniqueEmail($email) && Validator::validatePW($pw) && Validator::confirmPW($pw, $pwc)) {
             $user = $userTable->create(new User(null, $email, $name, $pw));
             $_SESSION['user_id'] = $user->getId();
             $_SESSION['nickname'] = $user->getNickname();
-            return $this->redirect('/index/index');
+            return $this->redirect('/index/index' . generateFlash('Registration completed. You are now logged in', 'success'));
         }
         return $this->redirect('/login/index' .generateFlash('Registration failed. Please adjust the wrong input fields.', 'error'));
     }

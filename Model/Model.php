@@ -15,7 +15,7 @@ class Model {
      */
 	public function __construct($currentTable = null)
 	{
-        $this->currentTable = ucfirst(str_replace(__NAMESPACE__ . '\\Entity\\', '', $currentTable));
+        $this->currentTable = str_replace(__NAMESPACE__ . '\\Entity\\', '', $currentTable);
 		$this->connection = DBConnector::getInstance();
 	}
 
@@ -43,6 +43,7 @@ class Model {
         while ($row = $result->fetch_assoc()) {
             $rows[] = $row;
         }
+        if (count($rows) == 0) return null;
         return $rows;
     }
 

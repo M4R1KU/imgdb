@@ -46,7 +46,7 @@ class ImageTable extends Model {
      * @return bool|Image
      */
     public function create($image) {
-        $query = $this->connection->prepare("INSERT INTO Image (id_gallery, title, description, file_path) VALUES (?, ?, ?, ?)");
+        $query = $this->connection->prepare("INSERT INTO image (id_gallery, title, description, file_path) VALUES (?, ?, ?, ?)");
         $query->bind_param('isss', $image->getGallery()->getId(), $image->getTitle(), $image->getDescription(), $image->getFilePath());
         if (!$query->execute()) return false;
         $image->setId($this->connection->insert_id);
@@ -69,7 +69,7 @@ class ImageTable extends Model {
      */
     public function getImagesByGallery(Gallery $gallery) {
         $gid = $gallery->getId();
-        $query = $this->connection->prepare("SELECT * FROM Image WHERE id_gallery = ?");
+        $query = $this->connection->prepare("SELECT * FROM image WHERE id_gallery = ?");
         $query->bind_param('i', intval($gid));
         $res = $this->readAllOrSingle($query);
         if (!$res) return $res;
@@ -82,8 +82,18 @@ class ImageTable extends Model {
     }
 
     public function deleteById($id) {
-        $query = $this->connection->prepare("DELETE FROM Image WHERE image_id = ?");
+        $query = $this->connection->prepare("DELETE FROM image WHERE image_id = ?");
         $query->bind_param('i', intval($id));
+        return $this->exec($query);
+    }
+
+    /**
+     * @param Image $image
+     * @return bool
+     */
+    public function update($image) {
+        $query = $this->connection->prepare("UPDATE image SET title = ?, description = ? WHERE image_id = ?");
+        $query->bind_param('ssi', $image->getTitle(), $image->getDescription(), $image->getId());
         return $this->exec($query);
     }
 
@@ -118,7 +128,7 @@ class ImageTable extends Model {
      * @return bool
      */
     public function userCanSeePicture($name, $user_id) {
-        $query = $this->connection->prepare("SELECT * FROM Image AS i JOIN Gallery AS g ON i.id_gallery = g.gallery_id JOIN User AS u ON g.id_user = u.user_id WHERE g.private = 0 OR i.file_path = ? AND u.user_id = ?");
+        $query = $this->connection->prepare("SELECT * FROM image AS i JOIN Gallery AS g ON i.id_gallery = g.gallery_id JOIN User AS u ON g.id_user = u.user_id WHERE g.private = 0 OR i.file_path = ? AND u.user_id = ?");
         $query->bind_param('si', $name, intval($user_id));
         $res = $this->readAllArray($query);
         if ($res) return true;

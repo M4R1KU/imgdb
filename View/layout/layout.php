@@ -49,7 +49,7 @@
     </div>
 </main>
 <script src="/js/jquery-2.1.4.min.js"></script>
-<script type="text/javascript" src="/js/materialize.js"></script>
+<script type="text/javascript" src="/js/materialize.min.js"></script>
 <script type="text/javascript" src="/js/main.js"></script>
 <script type="text/javascript" src="/js/search.js"></script>
 </body>
