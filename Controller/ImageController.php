@@ -84,7 +84,7 @@ class ImageController extends Controller {
         $gallery = $galleryTable->readById($id);
 
         if ($this->request->session['user_id'] != $gallery->getUser()->getId()) {
-            return $this->redirect('/gallery/index'. generateFlash('You are not allowed to add images in this gallery.', 'warning') . '&id=' . $id);
+            return $this->redirect('/index/index'. generateFlash('You are not allowed to add images in this gallery.', 'warning'));
         }
 
         $dirName = getGalleryHash($gallery) . '/';
@@ -126,7 +126,7 @@ class ImageController extends Controller {
 
         $image = $imageTable->readById($id);
 
-        if ($image->getGallery()->getUser()->getId() != $this->request->session['user_id']) return $this->redirect('/Error/index?id=403');
+        if ($image->getGallery()->getUser()->getId() != $this->request->session['user_id']) return $this->redirect('/Error/index?error=403');
 
         $image->setTitle($title);
         $image->setDescription($description);
@@ -144,7 +144,7 @@ class ImageController extends Controller {
         $id = $this->request->params['passed']['id'];
         $image = $imageTable->readById($id);
 
-        if ($image->getGallery()->getUser()->getId() != $this->request->session['user_id']) return $this->redirect('/Error/index?id=403');
+        if ($image->getGallery()->getUser()->getId() != $this->request->session['user_id']) return $this->redirect('/Error/index?error=403');
 
         if ($imageTable->delete($image)) {
             return $this->redirect('/gallery/index?id=' . $image->getGallery()->getId());

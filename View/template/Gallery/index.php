@@ -1,9 +1,9 @@
 <?php include '../View/layout/flash.php' ?>
 <?php /** @var MKWeb\ImgDB\Model\Entity\Gallery gallery */ ?>
-    <h1><?= h($this->gallery->getName()); ?>
+    <h1 class="wrapped"><?= h($this->gallery->getName()); ?>
         <small>by <?= h($this->gallery->getUser()->getNickname()) ?></small>
     </h1>
-    <p><?= $this->gallery->getDescription(); ?></p>
+    <p class="wrapped"><?= $this->gallery->getDescription(); ?></p>
     <div class="row gallery">
 <?php
 /**

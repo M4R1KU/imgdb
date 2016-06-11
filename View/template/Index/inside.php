@@ -10,7 +10,7 @@
                     <div class="col s12 m4">
                         <div class="card z-depth-1-half">
                             <div class="card-content">
-                        <span class="card-title"><a
+                        <span class="card-title wrapped"><a
                                 href="/gallery/index?id=<?= $gallery->getId() ?>" class="title"><?= h($gallery->getName()); ?></a>
                             <i class="material-icons right privacy-icon tooltipped" data-position="bottom"
                                data-delay="50"
@@ -40,7 +40,7 @@
                     <div class="col s12 m4">
                         <div class="card z-depth-1-half">
                             <div class="card-content">
-                        <span class="card-title"><a
+                        <span class="card-title wrapped"><a
                                 href="/gallery/index?id=<?= $gallery->getId() ?>"><?=h($gallery->getName()); ?></a>
                             <i class="material-icons right privacy-icon tooltipped" data-position="bottom"
                                data-delay="50"
