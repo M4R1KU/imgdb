@@ -23,8 +23,8 @@ class Validator {
      * @return boolean
      */
     public static function validatePW($pw) {
-        $pwpattern = '^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,50}$';
-        return empty($pw) && !preg_match($pwpattern, $pw);
+        $pwpattern = '/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,50}$/';
+        return preg_match($pwpattern, $pw);
     }
 
 
