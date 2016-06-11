@@ -29,6 +29,19 @@ function h($text)
 
 }
 
+/**
+ * generates an a tag with the given options
+ *
+ * linkHelper('/index/index/', 'Back to Main site', ['class' => ['btn', 'waves-effect']]);
+ *  results in
+ * <a class="btn waves-effect" href="/index/index">Back to Main site"</a>
+ *
+ *
+ * @param $link
+ * @param $name
+ * @param array|null $options
+ * @return string
+ */
 function linkHelper($link, $name, array $options = null)
 {
     $href = $classes = '';
@@ -49,6 +62,14 @@ function linkHelper($link, $name, array $options = null)
     return '<a href="' . $href . '"' . (strlen($classes) > 0 ? 'class="' . $classes . '"' : '') . ' >' . $name . '</a>';
 }
 
+/**
+ * 
+ * resizes the image in the galleryDir to a height of 200px and moves the new image to the thumbnailDir 
+ * 
+ * @param $galleryDir
+ * @param $galleryThumbnailDir
+ * @param $newFilename
+ */
 function resizeAndMoveImage($galleryDir, $galleryThumbnailDir, $newFilename)
 {
     list($width, $height) = getimagesize($galleryDir . $newFilename);
@@ -63,6 +84,13 @@ function resizeAndMoveImage($galleryDir, $galleryThumbnailDir, $newFilename)
     imagejpeg($thumb, $galleryThumbnailDir . $newFilename);
 }
 
+/**
+ * 
+ * returns a resource of an image by its path
+ * 
+ * @param $image
+ * @return null|resource
+ */
 function getImageByType($image) {
     $ext = pathinfo($image, PATHINFO_EXTENSION);
     if ($ext == "png")
@@ -75,17 +103,39 @@ function getImageByType($image) {
     return null;
 }
 
+/**
+ * returns a hash of the galleryName and galleryId
+ * 
+ * used to make the image directories
+ * 
+ * @param \MKWeb\ImgDB\Model\Entity\Gallery $gallery
+ * @return string
+ */
 function getGalleryHash(\MKWeb\ImgDB\Model\Entity\Gallery $gallery)
 {
     return sha1($gallery->getName() . $gallery->getId());
 }
 
+/**
+ * returns a hash of the current time the filename and the filetype
+ * 
+ * prevents same image name
+ * 
+ * @param $fileNameWithType
+ * @return string
+ */
 function getImageHash($fileNameWithType)
 {
     return hash('sha256', $fileNameWithType . time()) . '.' . end(explode('.', $fileNameWithType));
 }
 
-
+/**
+ * generates the flash parameters for the url
+ * 
+ * @param $message
+ * @param string $type
+ * @return string
+ */
 function generateFlash($message, $type = 'warning')
 {
     $time = time();
@@ -94,6 +144,8 @@ function generateFlash($message, $type = 'warning')
 }
 
 /**
+ * returns if the flash which is given in the URI is valid
+ * 
  * @return bool
  */
 function validateFlash()
@@ -115,6 +167,12 @@ function validateFlash()
     return hash('sha256', $message . SECRET . $time . $type) === $hash;
 }
 
+/**
+ * prepares multiple gallery objects for the use in the template
+ * 
+ * @param $out
+ * @return array
+ */
 function prepareGalleries($out) {
     $galleries = [];
     if (count($out) >= 3) {
@@ -129,6 +187,11 @@ function prepareGalleries($out) {
     return $galleries;
 }
 
+/**
+ * deletes a directory recursively
+ * 
+ * @param $dir
+ */
 function deleteDir($dir) {
     if (! is_dir($dir)) {
         throw new InvalidArgumentException("$dir must be a directory");

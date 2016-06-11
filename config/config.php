@@ -19,15 +19,12 @@ define('ABS_FINAL_GALLERY_DIR', WEBROOT . REL_FINAL_GALLERY_DIR);
 define('ABS_THUMBNAIL_GALLERY_DIR', WEBROOT . REL_THUMBNAIL_GALLERY_DIR);
 define('THUMBNAIL_HEIGHT', 200);
 
-define('SECRET', 'U-:9=040eco?aMqmQTc');
+define('SECRET', 'U-:9=040eco?aMqmQTc'); //For flashes
 
 define('DB_HOST', '127.0.0.1');
 define('DB_NAME', 'imgdb');
 define('DB_USER', 'imgdb');
 define('DB_PW', '');
 define('DB_PORT', '3306');
-
-// if it is necessary you can define more constants
-
 
 ?>
